@@ -1,0 +1,66 @@
+\newpage
+\section{Methodology}
+\label{ch:Methodology}
+
+This chapter gives a detailed explanation of the methodology of this project. The pipeline is introduced in \cref{sec:Methodology:Pipeline}, followed by a description of how models are evaluated internally in \cref{sec:Methodology:Evaluation}. Finally, the feature engineering process is discussed in \cref{sec:Methodology:FeatureEngineering}
+
+
+\subsection{Pipeline}
+\label{sec:Methodology:Pipeline}
+
+Typical data science projects are developed iteratively, making a reproducible and streamlined workflow essential for analysis and continuing improvement. For this reason, a data pipeline is implemented using \textit{Data Version Control} \parencite{ruslan_kuprieiev_dvc_2024}, providing automatic caching and execution mechanisms. This setup allows for comparing model metrics among experiments and ensures reproducibility because it tracks the state of the git repository along with user-defined configuration and stage outputs. An overview of the stage can be found in \cref{fig:pipeline}.
+\begin{figure}[htbp]
+  \centering
+  \includesvg{images/graphviz.svg}
+  \caption{Overview of pipeline stages with dependencies shown as a directed acyclic graph (DAG). There are four stages, but some are run several times. The prepare, train, and eval stages are run for each target indicated by the naming convention \textit{stage-name@target}.} 
+  \label{fig:pipeline}
+\end{figure}
+The pipeline consists of four steps: First, the data is prepared by fetching relevant information from APIs. In this step, weather features using the OpenMeteo API are also generated. Second, models are trained and saved to disk for later use and inspection. Third, time-series cross-validation is performed, and all relevant metrics and visual inspections are calculated and plotted. More details on the evaluation are given in \cref{sec:Methodology:Evaluation}. Finally, out-of-sample forecasts for the specific forecasting horizons are generated and saved in the required format.
+
+\subsection{Evaluation}
+\label{sec:Methodology:Evaluation}
+
+This section briefly describes how the models are evaluated using Timeseries Cross-Validation (TSCV). The difference between standard Cross-Validation is that shuffling data points must be avoided because of data leakage. Furthermore, an expanding or a sliding window approach is employed. This procedure can be explained easily with a picture showing different training windows and forecasting horizons, as seen in \cref{fig:tscv}.
+\begin{figure}[htbp]
+    \centering
+    \includesvg[width=\textwidth]{images/cv_window.svg}
+    \caption{This figure depicts ten different folds in a Timeseries Cross-Validation with a sliding window. The train window (blue) uses a fixed amount of data points, in this case, three years, and then the following points after the train window ends is the test set (yellow), as defined by the forecasting horizon.}
+    \label{fig:tscv}
+\end{figure}
+This project uses a sliding window approach to keep the training window constant. This is because the final model used for the submission forecasts will also be trained on roughly the same amount of data. The motivation for this is that more than three to four years of data might not be helpful anymore to predict one week into the future. In addition, COVID-19 effects are included in the training window for the final model if the window is extended further. 
+
+For each fold in the TSCV, several metrics are computed and then averaged over all folds. All metrics are reported with their corresponding standard deviation between folds. The main metric is the Pinball Loss defined by:
+
+\begin{equation}
+\label{eq:PinballLoss}
+\text{PB}_{\tau}(\hat{q}_{\tau}, y) = 
+\begin{cases} 
+(1 - \tau) (\hat{q}_{\tau} - y) & \hat{q}_{\tau} > y \\
+\tau (y - \hat{q}_{\tau}) & y \geq \hat{q}_{\tau}
+\end{cases}
+,
+\end{equation}
+where $\hat{q}_\tau$ is the predictive $\tau$-quantile and y the observed value (NEEDS CITATION).
+
+The Pinball Loss is computed for each quantile level $\tau \in \{0.025, 0.25, 0.5, 0.75, 0.975\}$, then a sum over each Pinball Loss is computed. In addition to the Pinball Loss, which evaluates each quantile independently, interval metrics can be calculated involving two predictive quantiles. In this project, interval metrics are computed for the 50\% and 95\% central prediction interval (PI) as defined by the 25\%, 75\% quantiles, and 2.5\%, 97.5\% quantiles, respectively. The interval score (IS) can be computed directly from the two involved pinball losses with
+\begin{equation}
+\label{eq:IntervalScore}
+\text{IS}_{\alpha}(l, u, y) = \frac{\text{PB}_{\alpha/2}(l, y) + \text{PB}_{1-\alpha/2}(u, y)}{\alpha}.
+\end{equation}
+where $l$ and $u$ are the quantiles corresponding to the lower and upper bounds of the prediction interval, respectively. (NEEDS CITATION)
+
+In addition, the actual coverage of a prediction interval can be computed from empirical observations $\{y_i\}_{i=1}^{n}$ using
+\begin{equation}
+    \text{Cvg}_{\alpha} = \frac{1}{n} \sum_{i = 1}^{n} \mathbbm{1}\{ \hat{q}_{\alpha/2} \leq y_i \leq \hat{q}_{1 - \alpha /2 } \} \,,
+\end{equation}
+where $\mathbbm{1}(\cdot)$ is the indicator function, which takes the value 1 if the condition is true and 0 otherwise.
+The empirical coverage, i.e. the fraction of observations lying inside the interval, should be equal to $1 - \alpha$ for it to properly resemble a $(1 - \alpha)$-\% prediction interval.
+
+
+\subsection{Feature Engineering}
+\label{sec:Methodology:FeatureEngineering}
+
+As most forecasting methods used in the project are traditional tabular regressors, it is very important to generate good feature representations. This is called feature engineering and will be discussed here in more detail. The use of tabular regressors for forecasting is motivated by the availability of many potentially helpful features, such as weather variables, for energy consumption and bike traffic forecasting. Both targets show significant seasonality, which can be effectively modeled with cyclical encodings or simply time-related dummy variables.  
+
+
+

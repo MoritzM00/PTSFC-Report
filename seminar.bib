@@ -1,0 +1,414 @@
+
+@online{noauthor_smard_nodate,
+	title = {{SMARD} Electricity Consumption},
+	url = {https://www.smard.de/page/en/wiki-article/5884/6036},
+	urldate = {2025-01-21},
+}
+
+@misc{herzen_darts_2022,
+	title = {Darts: User-Friendly Modern Machine Learning for Time Series},
+	url = {http://arxiv.org/abs/2110.03224},
+	doi = {10.48550/arXiv.2110.03224},
+	shorttitle = {Darts},
+	abstract = {We present Darts, a Python machine learning library for time series, with a focus on forecasting. Darts offers a variety of models, from classics such as {ARIMA} to state-of-the-art deep neural networks. The emphasis of the library is on offering modern machine learning functionalities, such as supporting multidimensional series, meta-learning on multiple series, training on large datasets, incorporating external data, ensembling models, and providing a rich support for probabilistic forecasting. At the same time, great care goes into the {API} design to make it user-friendly and easy to use. For instance, all models can be used using fit()/predict(), similar to scikit-learn.},
+	number = {{arXiv}:2110.03224},
+	publisher = {{arXiv}},
+	author = {Herzen, Julien and Lässig, Francesco and Piazzetta, Samuele Giuliano and Neuer, Thomas and Tafti, Léo and Raille, Guillaume and Pottelbergh, Tomas Van and Pasieka, Marek and Skrodzki, Andrzej and Huguenin, Nicolas and Dumonal, Maxime and Kościsz, Jan and Bader, Dennis and Gusset, Frédérick and Benheddi, Mounir and Williamson, Camila and Kosinski, Michal and Petrik, Matej and Grosch, Gaël},
+	urldate = {2024-12-29},
+	date = {2022-05-19},
+	eprinttype = {arxiv},
+	eprint = {2110.03224 [cs]},
+	keywords = {Computer Science - Machine Learning, Statistics - Computation},
+}
+
+@software{zippenfenig_open-meteocom_2024,
+	title = {Open-Meteo.com Weather {API}},
+	rights = {Creative Commons Attribution 4.0 International},
+	url = {https://zenodo.org/doi/10.5281/zenodo.7970649},
+	abstract = {🎉🎉🎉 Exciting News! The Open-Meteo source code has officially reached version 1.0.0, marking a significant milestone. This release introduces a stable distribution for both Docker and Ubuntu packages, ensuring a more seamless and reliable deployment experience! 🎉🎉🎉
+
+Major changes include a restructuring of the internal database layout and the incorporation of new weather models. The redesigned database layout is geared towards long-term stability, ensuring compatibility with future versions.
+
+‼️ Important Notice: For users upgrading from previous versions utilizing Docker or Ubuntu Prebuilt packages, it is important to execute a database migration script to preserve previously downloaded weather data. Additionally, many weather models and variables have undergone renaming for consistency. Refer to this {PR} for detailed information. ‼️
+
+Version 1.0.0 also establishes the groundwork for redistributing the Open-Meteo database as open-data through an {AWS} Open-Data Sponsorship. Instead of directly downloading raw weather data in {GRIB} format from national weather services, users can now access the optimized time-series database from Open-Meteo directly through {AWS}. The open-data distribution allows fine control, enabling users to retrieve only a specific subset of weather variables relevant to their use case. This not only conserves resources for data processing but also reduces bandwidth usage on the servers of national weather services. Instructions can be found in the getting started guide and the open-data documentation. Please be aware that not all weather models and data sources are currently available and will be progressively added over the next few weeks with documentation and examples to follow.
+
+We sincerely appreciate your continuous support and trust that you'll find immense value in the latest enhancements introduced to the Open-Meteo weather {API}!
+
+What's Changed
+
+
+
+Import {FlatBuffers} generated files from client repository by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/461
+
+fix: {ICON}-D2 {EPS} download for rain/showers and upper level wind by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/465
+
+fix: bump github.com/vapor/vapor from 4.84.4 to 4.84.6 by @dependabot in https://github.com/open-meteo/open-meteo/pull/477
+
+fix: bump github.com/apple/swift-nio-http2 from 1.27.0 to 1.28.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/476
+
+fix: bump github.com/vapor/console-kit from 4.8.1 to 4.9.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/475
+
+fix: bump github.com/vapor/routing-kit from 4.8.0 to 4.8.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/474
+
+fix: bump {SamKirkland}/{FTP}-Deploy-Action from 4.3.0 to 4.3.4 by @dependabot in https://github.com/open-meteo/open-meteo/pull/473
+
+fix: bump docker/setup-qemu-action from 2 to 3 by @dependabot in https://github.com/open-meteo/open-meteo/pull/472
+
+fix: bump docker/login-action from 2 to 3 by @dependabot in https://github.com/open-meteo/open-meteo/pull/471
+
+fix: bump docker/setup-buildx-action from 2 to 3 by @dependabot in https://github.com/open-meteo/open-meteo/pull/470
+
+fix: bump docker/metadata-action from 4 to 5 by @dependabot in https://github.com/open-meteo/open-meteo/pull/469
+
+More efficient {FlatBuffers} encoding by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/481
+
+fix: bump docker/build-push-action from 4 to 5 by @dependabot in https://github.com/open-meteo/open-meteo/pull/478
+
+fix: bump github.com/apple/swift-nio from 2.60.0 to 2.61.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/489
+
+fix: bump github.com/vapor/async-kit from 1.18.0 to 1.19.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/493
+
+fix: bump github.com/vapor/console-kit from 4.9.0 to 4.9.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/495
+
+fix: bump github.com/vapor/vapor from 4.84.6 to 4.85.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/498
+
+fix: bump github.com/apple/swift-nio from 2.61.0 to 2.61.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/492
+
+Make timezones optional for daily data by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/496
+
+fix: bump github.com/open-meteo/sdk from 1.4.0 to 1.5.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/497
+
+fix: bump github.com/vapor/console-kit from 4.9.1 to 4.10.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/500
+
+fix: bump github.com/vapor/vapor from 4.85.1 to 4.86.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/499
+
+fix: bump github.com/vapor/vapor from 4.86.0 to 4.86.2 by @dependabot in https://github.com/open-meteo/open-meteo/pull/503
+
+fix: bump github.com/vapor/routing-kit from 4.8.1 to 4.8.2 by @dependabot in https://github.com/open-meteo/open-meteo/pull/502
+
+feat: Integrate daylight and sunshine duration by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/507
+
+fix: Missing {ECMWF} rain correctly label as {NaN} by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/508
+
+feat: Add {ERA}5 Ocean waves to Marine {API} with 80 years history by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/510
+
+fix: bump github.com/apple/swift-algorithms from 1.1.0 to 1.2.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/509
+
+Fix: Protect {JMA} downloader against overlapping runs by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/516
+
+Added {WetBulb} to the app list by @Isma1306 in https://github.com/open-meteo/open-meteo/pull/520
+
+fix: bump github.com/vapor/vapor from 4.86.2 to 4.87.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/517
+
+feat: Output location\_id in {JSON} format if not 0 by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/522
+
+fix: Correct {DWD} {ICON} weather codes to remove drizzle if precipitation is 0 by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/523
+
+fix: approximate freezing level height for grid-elevation below ground by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/524
+
+fix: {CORS} preflight support by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/528
+
+feat: Select number of hourly time steps independently from daily by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/530
+
+Fix: Define liquid rain in meteofrance models by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/531
+
+feat: Integrate additional layers for {GFS} and {HRRR} by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/532
+
+Domain registry and refactoring by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/538
+
+Support {POST} requests for longer locations lists by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/544
+
+Fix negative snow depth by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/546
+
+{BREAKING} {CHANGE}: New directory structure for local database files by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/543
+
+fix: bump github.com/vapor/vapor from 4.89.0 to 4.89.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/547
+
+Rework {NCEP} {GFS} downloader by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/551
+
+fix: bump github.com/vapor/vapor from 4.89.1 to 4.89.3 by @dependabot in https://github.com/open-meteo/open-meteo/pull/550
+
+fix: bump actions/upload-artifact from 3 to 4 by @dependabot in https://github.com/open-meteo/open-meteo/pull/553
+
+Use new {MeteoFrance} {API} by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/561
+
+Use sendable for life cycle objects and update all controllers by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/568
+
+fix: bump github.com/swift-server/async-http-client from 1.19.0 to 1.20.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/565
+
+fix: bump github.com/vapor/routing-kit from 4.8.2 to 4.9.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/564
+
+fix: bump github.com/apple/swift-collections from 1.0.5 to 1.0.6 by @dependabot in https://github.com/open-meteo/open-meteo/pull/563
+
+fix: bump github.com/vapor/multipart-kit from 4.5.4 to 4.6.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/557
+
+{CMA} {GFS} {GRAPES} model integration by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/573
+
+Integrate Australian Bureau of Meteorology ({BOM}) forecasts by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/575
+
+fix: bump github.com/vapor/vapor from 4.90.0 to 4.91.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/582
+
+fix: bump github.com/vapor/console-kit from 4.14.0 to 4.14.1 by @dependabot in https://github.com/open-meteo/open-meteo/pull/586
+
+fix: bump github.com/apple/swift-crypto from 3.1.0 to 3.2.0 by @dependabot in https://github.com/open-meteo/open-meteo/pull/584
+
+Update getting started by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/560
+
+
+New Contributors
+
+
+
+@Isma1306 made their first contribution in https://github.com/open-meteo/open-meteo/pull/520
+
+
+Full Changelog: https://github.com/open-meteo/open-meteo/compare/0.2.89...1.0.0
+
+About the Open-Meteo Weather {API}: Open-Meteo is a weather {API} that operates on an open-source basis and provides free access for non-commercial purposes. No {API} key is necessary; you can start using it right away!
+
+At Open-Meteo, we firmly believe that access to accurate and dependable weather data should be accessible to all. That's why we've developed an open-source weather {API} that utilizes weather forecasts derived from open-data sources offered by national weather services. Unlike other weather {APIs}, Open-Meteo grants complete access to its source code, and all data sources are openly acknowledged, giving credit to the national weather services for their valuable contributions. Users can set up their own weather {API} rapidly using Docker or prebuilt Ubuntu packages. By sharing the source code, users can thoroughly scrutinize the weather data processing and even make adjustments as needed. We actively encourage and welcome contributions from our user community.
+
+This {API} is freely available for non-commercial use, with no associated costs. Despite being free of charge, it delivers top-tier forecast accuracy. Leveraging an extensive range of local weather models with frequent updates, the {API} ensures the generation of highly precise forecasts for locations worldwide.
+
+We appreciate your consideration of Open-Meteo for your weather data requirements. We are continuously working to enhance our services and are open to any feedback or inquiries you may have. Please do not hesitate to reach out to us at info@open-meteo.com.},
+	version = {1.0.0},
+	publisher = {Zenodo},
+	author = {Zippenfenig, Patrick},
+	urldate = {2024-12-29},
+	date = {2024-01-11},
+	doi = {10.5281/ZENODO.7970649},
+	keywords = {{IPCC} climate models, Marine forecast, air quality, ensemble prediction, historical weather data, open-data, weather api, weather forecast},
+}
+
+@software{franz_kiraly_sktimesktime_2024,
+	title = {sktime/sktime: v0.35.0},
+	rights = {{BSD} 3-Clause "New" or "Revised" License},
+	url = {https://zenodo.org/doi/10.5281/zenodo.3749000},
+	shorttitle = {sktime/sktime},
+	abstract = {What's Changed
+
+Maintenance release with scheduled deprecations and change actions.
+
+For last larger feature update, see 0.34.1.
+
+Please see our changelog for a description of all changes.
+
+Full Changelog: https://github.com/sktime/sktime/compare/v0.34.1...v0.35.0},
+	version = {v0.35.0},
+	publisher = {Zenodo},
+	author = {Franz Király and Markus Löning and Tony Bagnall and Matthew Middlehurst and Anirban Ray and Sajaysurya Ganesh and Martin Walter and George Oastler and Jason Lines and {ViktorKaz} and Benedikt Heidrich and Lukasz Mentel and Sagar Mishra and chrisholder and Daniel Bartling and Leonidas Tsaprounis and Armaghan Shakir and {RNKuhns} and Ciaran Gilbert and Mirae Baichoo and Hazrul Akmal and Felix Hirwa Nshuti and Alex-{JG}3 and Guzal and Taiwo Owoseni and Patrick Rockenschaub and eenticott-shell and Pranav Prajapati and Sami Alavi},
+	urldate = {2024-12-29},
+	date = {2024-12-09},
+	doi = {10.5281/ZENODO.3749000},
+}
+
+@software{ruslan_kuprieiev_dvc_2024,
+	title = {{DVC}: Data Version Control - Git for Data \& Models},
+	rights = {Creative Commons Attribution 4.0 International},
+	url = {https://zenodo.org/doi/10.5281/zenodo.3677553},
+	shorttitle = {{DVC}},
+	abstract = {{\textless}!-- Release notes generated using configuration in .github/release.yml at main --{\textgreater}
+
+What's Changed
+
+
+
+Add --keep option for dvc experiments remove by @rmic in https://github.com/iterative/dvc/pull/10633
+
+Fix \#10638 : makes remove return correct list when used with both --queue and -A  by @rmic in https://github.com/iterative/dvc/pull/10641
+
+
+Other Changes
+
+
+
+set {DVC}\_NO\_ANALYTICS on lint by @skshetry in https://github.com/iterative/dvc/pull/10640
+
+
+New Contributors
+
+
+
+@rmic made their first contribution in https://github.com/iterative/dvc/pull/10633
+
+
+Full Changelog: https://github.com/iterative/dvc/compare/3.57.0...3.58.0},
+	version = {3.58.0},
+	publisher = {Zenodo},
+	author = {Ruslan Kuprieiev and skshetry and Peter Rowlands (변기호) and Dmitry Petrov and Paweł Redzyński and Casper da Costa-Luis and David de la Iglesia Castro and Alexander Schepanovski and Ivan Shcheklein and Gao and Batuhan Taskaya and Jorge Orpinel and Fábio Santos and Daniele and Ronan Lamy and Aman Sharma and Zhanibek Kaimuldenov and Dani Hodovic and Nikita Kodenko and Andrew Grigorev and Earl and Nabanita Dash and George Vyshnya and Dave Berenbaum and maykulkarni and Max Hora and Vera and Sanidhya Mangal},
+	editora = {team, D. V. C.},
+	editoratype = {collaborator},
+	urldate = {2024-12-27},
+	date = {2024-12-01},
+	doi = {10.5281/ZENODO.3677553},
+	keywords = {ai, collaboration, data-science, data-version-control, developer-tools, git, machine-learning, python, reproducibility},
+}
+
+@article{ziel_quantile_2019,
+	title = {Quantile regression for the qualifying match of {GEFCom}2017 probabilistic load forecasting},
+	volume = {35},
+	issn = {0169-2070},
+	url = {https://www.sciencedirect.com/science/article/pii/S0169207018300979},
+	doi = {10.1016/j.ijforecast.2018.07.004},
+	abstract = {We present a simple quantile regression-based forecasting method that was applied in the probabilistic load forecasting framework of the Global Energy Forecasting Competition 2017 ({GEFCom}2017). The hourly load data are log transformed and split into a long-term trend component and a remainder term. The key forecasting element is the quantile regression approach for the remainder term, which takes into account both weekly and annual seasonalities, such as their interactions. Temperature information is used only for stabilizing the forecast of the long-term trend component. Information on public holidays is ignored. However, the forecasting method still placed second in the open data track and fourth in the definite data track, which is remarkable given the simplicity of the model. The method also outperforms the Vanilla benchmark consistently.},
+	pages = {1400--1408},
+	number = {4},
+	journaltitle = {International Journal of Forecasting},
+	shortjournal = {International Journal of Forecasting},
+	author = {Ziel, Florian},
+	urldate = {2024-11-17},
+	date = {2019-10-01},
+	keywords = {{GEFCom}, Load forecasting, Long-term trend, Periodic pattern, Probabilistic forecasting, Quantile regression, Seasonal interaction},
+}
+
+@article{makridakis_m5_2022,
+	title = {The M5 uncertainty competition: Results, findings and conclusions},
+	volume = {38},
+	issn = {0169-2070},
+	url = {https://www.sciencedirect.com/science/article/pii/S0169207021001722},
+	doi = {10.1016/j.ijforecast.2021.10.009},
+	series = {Special Issue: M5 competition},
+	shorttitle = {The M5 uncertainty competition},
+	abstract = {This paper describes the M5 “Uncertainty” competition, the second of two parallel challenges of the latest M competition, aiming to advance the theory and practice of forecasting. The particular objective of the M5 “Uncertainty” competition was to accurately forecast the uncertainty distributions of the realized values of 42,840 time series that represent the hierarchical unit sales of the largest retail company in the world by revenue, Walmart. To do so, the competition required the prediction of nine different quantiles (0.005, 0.025, 0.165, 0.250, 0.500, 0.750, 0.835, 0.975, and 0.995), that can sufficiently describe the complete distributions of future sales. The paper provides details on the implementation and execution of the M5 “Uncertainty” competition, presents its results and the top-performing methods, and summarizes its major findings and conclusions. Finally, it discusses the implications of its findings and suggests directions for future research.},
+	pages = {1365--1385},
+	number = {4},
+	journaltitle = {International Journal of Forecasting},
+	shortjournal = {International Journal of Forecasting},
+	author = {Makridakis, Spyros and Spiliotis, Evangelos and Assimakopoulos, Vassilios and Chen, Zhi and Gaba, Anil and Tsetlin, Ilia and Winkler, Robert L.},
+	urldate = {2024-11-17},
+	date = {2022-10-01},
+	keywords = {Forecasting competitions, M competitions, Machine learning, Probabilistic forecasts, Retail sales forecasting, Time series, Uncertainty},
+}
+
+@book{noauthor_notitle_nodate,
+}
+
+@book{hyndman_forecasting_nodate,
+	title = {Forecasting: Principles and Practice (3rd ed)},
+	url = {https://otexts.com/fpp3/},
+	shorttitle = {Forecasting},
+	abstract = {3rd edition},
+	author = {Hyndman},
+}
+
+@article{borisov_deep_2024,
+	title = {Deep Neural Networks and Tabular Data: A Survey},
+	volume = {35},
+	issn = {2162-237X, 2162-2388},
+	url = {http://arxiv.org/abs/2110.01889},
+	doi = {10.1109/TNNLS.2022.3229161},
+	shorttitle = {Deep Neural Networks and Tabular Data},
+	abstract = {Heterogeneous tabular data are the most commonly used form of data and are essential for numerous critical and computationally demanding applications. On homogeneous data sets, deep neural networks have repeatedly shown excellent performance and have therefore been widely adopted. However, their adaptation to tabular data for inference or data generation tasks remains challenging. To facilitate further progress in the field, this work provides an overview of state-of-the-art deep learning methods for tabular data. We categorize these methods into three groups: data transformations, specialized architectures, and regularization models. For each of these groups, our work offers a comprehensive overview of the main approaches. Moreover, we discuss deep learning approaches for generating tabular data, and we also provide an overview over strategies for explaining deep models on tabular data. Thus, our first contribution is to address the main research streams and existing methodologies in the mentioned areas, while highlighting relevant challenges and open research questions. Our second contribution is to provide an empirical comparison of traditional machine learning methods with eleven deep learning approaches across five popular real-world tabular data sets of different sizes and with different learning objectives. Our results, which we have made publicly available as competitive benchmarks, indicate that algorithms based on gradient-boosted tree ensembles still mostly outperform deep learning models on supervised learning tasks, suggesting that the research progress on competitive deep learning models for tabular data is stagnating. To the best of our knowledge, this is the first in-depth overview of deep learning approaches for tabular data; as such, this work can serve as a valuable starting point to guide researchers and practitioners interested in deep learning with tabular data.},
+	pages = {7499--7519},
+	number = {6},
+	journaltitle = {{IEEE} Transactions on Neural Networks and Learning Systems},
+	shortjournal = {{IEEE} Trans. Neural Netw. Learning Syst.},
+	author = {Borisov, Vadim and Leemann, Tobias and Seßler, Kathrin and Haug, Johannes and Pawelczyk, Martin and Kasneci, Gjergji},
+	urldate = {2024-08-18},
+	date = {2024-06},
+	eprinttype = {arxiv},
+	eprint = {2110.01889 [cs]},
+	keywords = {Computer Science - Machine Learning},
+}
+
+@misc{shwartz-ziv_tabular_2021,
+	title = {Tabular Data: Deep Learning is Not All You Need},
+	rights = {Creative Commons Attribution 4.0 International},
+	url = {https://arxiv.org/abs/2106.03253},
+	doi = {10.48550/ARXIV.2106.03253},
+	shorttitle = {Tabular Data},
+	abstract = {A key element in solving real-life data science problems is selecting the types of models to use. Tree ensemble models (such as {XGBoost}) are usually recommended for classification and regression problems with tabular data. However, several deep learning models for tabular data have recently been proposed, claiming to outperform {XGBoost} for some use cases. This paper explores whether these deep models should be a recommended option for tabular data by rigorously comparing the new deep models to {XGBoost} on various datasets. In addition to systematically comparing their performance, we consider the tuning and computation they require. Our study shows that {XGBoost} outperforms these deep models across the datasets, including the datasets used in the papers that proposed the deep models. We also demonstrate that {XGBoost} requires much less tuning. On the positive side, we show that an ensemble of deep models and {XGBoost} performs better on these datasets than {XGBoost} alone.},
+	publisher = {{arXiv}},
+	author = {Shwartz-Ziv, Ravid and Armon, Amitai},
+	urldate = {2024-08-18},
+	date = {2021},
+	note = {Version Number: 2},
+	keywords = {{FOS}: Computer and information sciences, Machine Learning (cs.{LG})},
+}
+
+@misc{grinsztajn_why_2022,
+	title = {Why do tree-based models still outperform deep learning on tabular data?},
+	rights = {{arXiv}.org perpetual, non-exclusive license},
+	url = {https://arxiv.org/abs/2207.08815},
+	doi = {10.48550/ARXIV.2207.08815},
+	abstract = {While deep learning has enabled tremendous progress on text and image datasets, its superiority on tabular data is not clear. We contribute extensive benchmarks of standard and novel deep learning methods as well as tree-based models such as {XGBoost} and Random Forests, across a large number of datasets and hyperparameter combinations. We define a standard set of 45 datasets from varied domains with clear characteristics of tabular data and a benchmarking methodology accounting for both fitting models and finding good hyperparameters. Results show that tree-based models remain state-of-the-art on medium-sized data (\${\textbackslash}sim\$10K samples) even without accounting for their superior speed. To understand this gap, we conduct an empirical investigation into the differing inductive biases of tree-based models and Neural Networks ({NNs}). This leads to a series of challenges which should guide researchers aiming to build tabular-specific {NNs}: 1. be robust to uninformative features, 2. preserve the orientation of the data, and 3. be able to easily learn irregular functions. To stimulate research on tabular architectures, we contribute a standard benchmark and raw data for baselines: every point of a 20 000 compute hours hyperparameter search for each learner.},
+	publisher = {{arXiv}},
+	author = {Grinsztajn, Léo and Oyallon, Edouard and Varoquaux, Gaël},
+	urldate = {2024-08-18},
+	date = {2022},
+	note = {Version Number: 1},
+	keywords = {Artificial Intelligence (cs.{AI}), {FOS}: Computer and information sciences, Machine Learning (cs.{LG}), Machine Learning (stat.{ML}), Methodology (stat.{ME})},
+}
+
+@article{box_analysis_1964,
+	title = {An Analysis of Transformations},
+	volume = {26},
+	rights = {https://academic.oup.com/journals/pages/open\_access/funder\_policies/chorus/standard\_publication\_model},
+	issn = {1369-7412, 1467-9868},
+	url = {https://academic.oup.com/jrsssb/article/26/2/211/7028064},
+	doi = {10.1111/j.2517-6161.1964.tb00553.x},
+	abstract = {Summary 
+            In the analysis of data it is often assumed that observations y  1, y  2, …, yn are independently normally distributed with constant variance and with expectations specified by a model linear in a set of parameters θ. In this paper we make the less restrictive assumption that such a normal, homoscedastic, linear model is appropriate after some suitable transformation has been applied to the y's. Inferences about the transformation and about the parameters of the linear model are made by computing the likelihood function and the relevant posterior distribution. The contributions of normality, homoscedasticity and additivity to the transformation are separated. The relation of the present methods to earlier procedures for finding transformations is discussed. The methods are illustrated with examples.},
+	pages = {211--243},
+	number = {2},
+	journaltitle = {Journal of the Royal Statistical Society Series B: Statistical Methodology},
+	author = {Box, G. E. P. and Cox, D. R.},
+	urldate = {2024-08-27},
+	date = {1964-07-01},
+	langid = {english},
+}
+
+@article{prokhorenkova_catboost_2017,
+	title = {{CatBoost}: unbiased boosting with categorical features},
+	rights = {{arXiv}.org perpetual, non-exclusive license},
+	url = {https://arxiv.org/abs/1706.09516},
+	doi = {10.48550/ARXIV.1706.09516},
+	shorttitle = {{CatBoost}},
+	abstract = {This paper presents the key algorithmic techniques behind {CatBoost}, a new gradient boosting toolkit. Their combination leads to {CatBoost} outperforming other publicly available boosting implementations in terms of quality on a variety of datasets. Two critical algorithmic advances introduced in {CatBoost} are the implementation of ordered boosting, a permutation-driven alternative to the classic algorithm, and an innovative algorithm for processing categorical features. Both techniques were created to fight a prediction shift caused by a special kind of target leakage present in all currently existing implementations of gradient boosting algorithms. In this paper, we provide a detailed analysis of this problem and demonstrate that proposed algorithms solve it effectively, leading to excellent empirical results.},
+	author = {Prokhorenkova, Liudmila and Gusev, Gleb and Vorobev, Aleksandr and Dorogush, Anna Veronika and Gulin, Andrey},
+	urldate = {2024-08-18},
+	date = {2017},
+	keywords = {{FOS}: Computer and information sciences, Machine Learning (cs.{LG})},
+}
+
+@article{akiba_optuna_2019,
+	title = {Optuna: A Next-generation Hyperparameter Optimization Framework},
+	rights = {{arXiv}.org perpetual, non-exclusive license},
+	url = {https://arxiv.org/abs/1907.10902},
+	doi = {10.48550/ARXIV.1907.10902},
+	shorttitle = {Optuna},
+	abstract = {The purpose of this study is to introduce new design-criteria for next-generation hyperparameter optimization software. The criteria we propose include (1) define-by-run {API} that allows users to construct the parameter search space dynamically, (2) efficient implementation of both searching and pruning strategies, and (3) easy-to-setup, versatile architecture that can be deployed for various purposes, ranging from scalable distributed computing to light-weight experiment conducted via interactive interface. In order to prove our point, we will introduce Optuna, an optimization software which is a culmination of our effort in the development of a next generation optimization software. As an optimization software designed with define-by-run principle, Optuna is particularly the first of its kind. We will present the design-techniques that became necessary in the development of the software that meets the above criteria, and demonstrate the power of our new design through experimental results and real world applications. Our software is available under the {MIT} license (https://github.com/pfnet/optuna/).},
+	author = {Akiba, Takuya and Sano, Shotaro and Yanase, Toshihiko and Ohta, Takeru and Koyama, Masanori},
+	urldate = {2024-08-18},
+	date = {2019},
+	keywords = {{FOS}: Computer and information sciences, Machine Learning (cs.{LG}), Machine Learning (stat.{ML})},
+}
+
+@inproceedings{ke_lightgbm_2017,
+	location = {Red Hook, {NY}, {USA}},
+	title = {{LightGBM}: a highly efficient gradient boosting decision tree},
+	isbn = {978-1-5108-6096-4},
+	series = {{NIPS}'17},
+	shorttitle = {{LightGBM}},
+	abstract = {Gradient Boosting Decision Tree ({GBDT}) is a popular machine learning algorithm, and has quite a few effective implementations such as {XGBoost} and {pGBRT}. Although many engineering optimizations have been adopted in these implementations, the efficiency and scalability are still unsatisfactory when the feature dimension is high and data size is large. A major reason is that for each feature, they need to scan all the data instances to estimate the information gain of all possible split points, which is very time consuming. To tackle this problem, we propose two novel techniques: Gradient-based One-Side Sampling ({GOSS}) and Exclusive Feature Bundling ({EFB}). With {GOSS}, we exclude a significant proportion of data instances with small gradients, and only use the rest to estimate the information gain. We prove that, since the data instances with larger gradients play a more important role in the computation of information gain, {GOSS} can obtain quite accurate estimation of the information gain with a much smaller data size. With {EFB}, we bundle mutually exclusive features (i.e., they rarely take nonzero values simultaneously), to reduce the number of features. We prove that finding the optimal bundling of exclusive features is {NP}-hard, but a greedy algorithm can achieve quite good approximation ratio (and thus can effectively reduce the number of features without hurting the accuracy of split point determination by much). We call our new {GBDT} implementation with {GOSS} and {EFB} {LightGBM}. Our experiments on multiple public datasets show that, {LightGBM} speeds up the training process of conventional {GBDT} by up to over 20 times while achieving almost the same accuracy.},
+	pages = {3149--3157},
+	booktitle = {Proceedings of the 31st International Conference on Neural Information Processing Systems},
+	publisher = {Curran Associates Inc.},
+	author = {Ke, Guolin and Meng, Qi and Finley, Thomas and Wang, Taifeng and Chen, Wei and Ma, Weidong and Ye, Qiwei and Liu, Tie-Yan},
+	urldate = {2024-08-18},
+	date = {2017-12-04},
+}
+
+@article{chen_xgboost_2016,
+	title = {{XGBoost}: A Scalable Tree Boosting System},
+	rights = {{arXiv}.org perpetual, non-exclusive license},
+	url = {https://arxiv.org/abs/1603.02754},
+	doi = {10.48550/ARXIV.1603.02754},
+	shorttitle = {{XGBoost}},
+	abstract = {Tree boosting is a highly effective and widely used machine learning method. In this paper, we describe a scalable end-to-end tree boosting system called {XGBoost}, which is used widely by data scientists to achieve state-of-the-art results on many machine learning challenges. We propose a novel sparsity-aware algorithm for sparse data and weighted quantile sketch for approximate tree learning. More importantly, we provide insights on cache access patterns, data compression and sharding to build a scalable tree boosting system. By combining these insights, {XGBoost} scales beyond billions of examples using far fewer resources than existing systems.},
+	author = {Chen, Tianqi and Guestrin, Carlos},
+	urldate = {2024-08-18},
+	date = {2016},
+	keywords = {{FOS}: Computer and information sciences, Machine Learning (cs.{LG})},
+}
