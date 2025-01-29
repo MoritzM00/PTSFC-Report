@@ -1,4 +1,37 @@
 
+@software{zippenfenig_open-meteocom_2024,
+	title = {Open-Meteo.com Weather {API}},
+	rights = {Creative Commons Attribution 4.0 International},
+	url = {https://zenodo.org/doi/10.5281/zenodo.7970649},
+	abstract = {Important The underlying Open-Meteo file format has been upgraded to support future features. This change impacts only users of the open-data distribution on {AWS} and does not affect those using the {API} or running downloaders directly.
+
+With this update, the {API} can now read both legacy and new file formats. Currently, only legacy files are available on {AWS}, but starting January 14, 2025, files in the new {OM} format will also be published on {AWS}. Users of the {AWS} distribution must upgrade their Docker images to version 1.4.0 or later.
+
+The new Open-Meteo file format is designed to be more flexible and compatible with standards, similar to formats like {NetCDF}4 or {HDF}5. We are working on client libraries that will allow users to access curated Open-Meteo weather data directly from {AWS} S3, enabling data scientists to analyze data at large scales, such as entire countries or continents, without interacting with the {API} for individual data pieces.
+
+This release marks the first step toward this vision, preparing Docker image users for the new file formats. Development of Python, Rust, and {TypeScript} libraries is ongoing and will take some time to complete.
+
+What's Changed
+
+
+
+feat: Store multi-dimensional data in new file format for more flexibility by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/1018
+
+fix: Automatically shift and flip {GRIB} data for grids starting at 0° longitude or 90° latitude by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/1164
+
+fix: ensemble {API} allow up to 36 days by @patrick-zippenfenig in https://github.com/open-meteo/open-meteo/pull/1167
+
+
+Full Changelog: https://github.com/open-meteo/open-meteo/compare/1.3.6...1.4.0},
+	version = {1.4.0},
+	publisher = {Zenodo},
+	author = {Zippenfenig, Patrick},
+	urldate = {2025-01-29},
+	date = {2024-12-31},
+	doi = {10.5281/ZENODO.7970649},
+	keywords = {{IPCC} climate models, Marine forecast, air quality, ensemble prediction, historical weather data, open-data, weather api, weather forecast},
+}
+
 @online{noauthor_smard_nodate,
 	title = {{SMARD} Electricity Consumption},
 	url = {https://www.smard.de/page/en/wiki-article/5884/6036},
@@ -21,7 +54,7 @@
 	keywords = {Computer Science - Machine Learning, Statistics - Computation},
 }
 
-@software{zippenfenig_open-meteocom_2024,
+@software{zippenfenig_open-meteocom_2024-1,
 	title = {Open-Meteo.com Weather {API}},
 	rights = {Creative Commons Attribution 4.0 International},
 	url = {https://zenodo.org/doi/10.5281/zenodo.7970649},

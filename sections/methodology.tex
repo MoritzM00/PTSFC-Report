@@ -42,25 +42,57 @@ For each fold in the TSCV, several metrics are computed and then averaged over a
 \end{equation}
 where $\hat{q}_\tau$ is the predictive $\tau$-quantile and y the observed value (NEEDS CITATION).
 
-The Pinball Loss is computed for each quantile level $\tau \in \{0.025, 0.25, 0.5, 0.75, 0.975\}$, then a sum over each Pinball Loss is computed. In addition to the Pinball Loss, which evaluates each quantile independently, interval metrics can be calculated involving two predictive quantiles. In this project, interval metrics are computed for the 50\% and 95\% central prediction interval (PI) as defined by the 25\%, 75\% quantiles, and 2.5\%, 97.5\% quantiles, respectively. The interval score (IS) can be computed directly from the two involved pinball losses with
+The Pinball Loss is computed for each quantile level $\tau \in \{0.025, 0.25, 0.5, 0.75, 0.975\}$, and then a sum over each Pinball Loss is computed. In addition to the Pinball Loss, which evaluates each quantile independently, interval metrics can be calculated involving two predictive quantiles. In this project, interval metrics are computed for the 50\% and 95\% central prediction interval (PI) as defined by the 25\%, 75\% quantiles and 2.5\%, 97.5\% quantiles, respectively. The interval score (IS) can be computed directly from the two involved pinball losses with
 \begin{equation}
 \label{eq:IntervalScore}
 \text{IS}_{\alpha}(l, u, y) = \frac{\text{PB}_{\alpha/2}(l, y) + \text{PB}_{1-\alpha/2}(u, y)}{\alpha}.
 \end{equation}
 where $l$ and $u$ are the quantiles corresponding to the lower and upper bounds of the prediction interval, respectively. (NEEDS CITATION)
 
-In addition, the actual coverage of a prediction interval can be computed from empirical observations $\{y_i\}_{i=1}^{n}$ using
+In addition, the empirical coverage of a prediction interval can be computed from 
+observations $\{y_i\}_{i=1}^{n}$ using
 \begin{equation}
     \text{Cvg}_{\alpha} = \frac{1}{n} \sum_{i = 1}^{n} \mathbbm{1}\{ \hat{q}_{\alpha/2} \leq y_i \leq \hat{q}_{1 - \alpha /2 } \} \,,
 \end{equation}
-where $\mathbbm{1}(\cdot)$ is the indicator function, which takes the value 1 if the condition is true and 0 otherwise.
-The empirical coverage, i.e. the fraction of observations lying inside the interval, should be equal to $1 - \alpha$ for it to properly resemble a $(1 - \alpha)$-\% prediction interval.
+where $\mathbbm{1}(\cdot)$ is the indicator function, which takes the value one if the condition is true and zero otherwise.
+The coverage calculates the fraction of observations inside the interval and should equal $1 - \alpha$ to properly resemble a $(1 - \alpha)$-\% prediction interval.
 
 
 \subsection{Feature Engineering}
 \label{sec:Methodology:FeatureEngineering}
 
-As most forecasting methods used in the project are traditional tabular regressors, it is very important to generate good feature representations. This is called feature engineering and will be discussed here in more detail. The use of tabular regressors for forecasting is motivated by the availability of many potentially helpful features, such as weather variables, for energy consumption and bike traffic forecasting. Both targets show significant seasonality, which can be effectively modeled with cyclical encodings or simply time-related dummy variables.  
+As most forecasting methods used in the project are traditional tabular regressors, 
+it is essential to generate good feature representations. 
+This is called feature engineering and will be discussed in more detail here.
+The use of tabular regressors for forecasting is motivated by the availability of many potentially helpful features, such as weather variables, for energy consumption and bike traffic forecasting.
+By incorporating these engineered features, we enhance the model's ability to 
+capture complex temporal patterns and generate more accurate probabilistic forecasts.
+In general, the features can be categorized into the following sections:
 
+\textbf{Weather conditions} can significantly influence time series patterns, particularly in domains such as bike traffic. Therefore, weather-related variables such as temperature and precipitation are included. These features are derived from historical weather data using the OpenMeteo API and, where available, supplemented with forecasted values  \parencite{zippenfenig_open-meteocom_2024}.
+
+\textbf{Seasonality} is especially important for the two datasets at hand because they show significant daily, weekly, and yearly patterns. To represent recurring patterns, we include cyclical encodings in the form of sinus and cosinus transformations or simply dummy variables, e.g. encoding the current month with eleven binary dummies.
+% For a given time-based variable \( t \) with a periodicity of \( P \), we compute two features:
+% \begin{align}
+%     \text{sin\_encoding} &= \sin\left( \frac{2\pi t}{P} \right) \\
+%     \text{cos\_encoding} &= \cos\left( \frac{2\pi t}{P} \right)
+% \end{align}
+
+\textbf{Lagged target values} provide historical context by introducing past observations as inputs to the model. We include both short-term lags (e.g., 1-day or 1-hour lag) to capture immediate trends and long-term lags (e.g., same time on the previous week or month).
+
+\textbf{Lagged exogenous variables} like weather variables can also be integrated but generally lead to many additional features. Therefore, the model has to somehow deal with the larger amount of features and select important lags.
+
+\textbf{Holidays} often introduce irregular patterns in time series data. To account for these effects, we include a binary holiday indicator that marks whether a given time step corresponds to a public holiday or a significant event. This helps the model distinguish between typical and exceptional time periods, allowing it to adjust for fluctuations caused by holidays.
+
+
+\subsection{Weekly Forecasting Challenge}
+\label{sec:Methodology:ForecastingChallenge}
+
+This project is centered around a weekly forecasting challenge, where participants submit
+forecasts for their selected targets every Wednesday from October 23, 2024, until February 12, 2025. The weekly forecasts cover six specific forecast horizons. This section briefly describes how the weekly forecasts are calculated.
+
+First, the currently selected model is trained on all available data for both targets to partially exclude effects from the pandemic period and keep the training window similar to the one used during the evaluation.\footnote{At the beginning, only a three-year training window was selected but a longer training window seemed to help, especially for the bike target where less data is available due to daily counts.} This happens during the \textit{train} stage of the pipeline, and each model is saved to disk. In the \textit{submit} stage, this model is loaded into memory again and used to generate forecasts.
+A wider evaluation window 
+was used to evaluate models during the challenge to keep the evaluation consistent as the weekly forecasts progressed. However, after the challenge was finished, a backtest using the final version of each model was done to evaluate models on the specific dates of the forecasting challenge.
 
 
