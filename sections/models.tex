@@ -2,13 +2,19 @@
 \section{Models}
 \label{ch:Models}
 
-\subsection{Benchmark Model}
-\subsection{Linear Quantile Regression}
+This chapter briefly describes the models that were used throughout the project. A standard practice in data science projects is to report metrics for simple baseline models be able to compare more sophisticated approaches against them. The baseline models used here are described in \cref{sec:Models:Baselines}. As stated in the beginning, a focus is set on Gradient-Boosting decision trees, which are discussed in \cref{sec:Models:GBDT}.
+
+\subsection{Baseline Models}
+\label{sec:Models:Baselines}
+
+The first baseline model is a historical quantile-based approach, referred to as \textit{Benchmark}. The benchmark simply computes quantiles based on the last $n = 100$ observations that share the same weekday and hour, which is a straightforward method to incorporate simple seasonalities in the data. The second baseline model is a linear quantile regression. This model optimizes ... (EXPLAIN LQR in few sentences)
+
 \subsection{Gradient Boosting Decision Trees}
+\label{sec:Models:GBDT}
+
+The overall idea of Gradient-boosting Decision Trees is explained first, and then important differences between the three popular GBDT-Libraries LightGBM \parencite{ke_lightgbm_2017}, XGBoost \parencite{chen_xgboost_2016}  and CatBoost \parencite{prokhorenkova_catboost_2017} are discussed.
 
 % \subsubsection{XGBoost}
 % \subsubsection{LightGBM}
 % \subsubsection{CatBoost}
 
-
-\parencite{franz_kiraly_sktimesktime_2024}

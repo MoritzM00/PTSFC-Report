@@ -2,7 +2,8 @@
 \section{Methodology}
 \label{ch:Methodology}
 
-This chapter gives a detailed explanation of the methodology of this project. The pipeline is introduced in \cref{sec:Methodology:Pipeline}, followed by a description of how models are evaluated internally in \cref{sec:Methodology:Evaluation}. Finally, the feature engineering process is discussed in \cref{sec:Methodology:FeatureEngineering}
+This chapter gives a detailed explanation of the methodology of this project. The pipeline is introduced in \cref{sec:Methodology:Pipeline}, followed by how models are evaluated internally in \cref{sec:Methodology:Evaluation}. Then, the feature engineering is presented in \cref{sec:Methodology:FeatureEngineering}.
+Finally, the weekly forecasting challenge and how predictions are generated will be discussed in \cref{sec:Methodology:ForecastingChallenge}.
 
 
 \subsection{Pipeline}
@@ -20,16 +21,16 @@ The pipeline consists of four steps: First, the data is prepared by fetching rel
 \subsection{Evaluation}
 \label{sec:Methodology:Evaluation}
 
-This section briefly describes how the models are evaluated using Timeseries Cross-Validation (TSCV). The difference between standard Cross-Validation is that shuffling data points must be avoided because of data leakage. Furthermore, an expanding or a sliding window approach is employed. This procedure can be explained easily with a picture showing different training windows and forecasting horizons, as seen in \cref{fig:tscv}.
+This section briefly describes how the models are evaluated using \textbf{Timeseries Cross-Validation} (TSCV) \parencite[Chapter~5.10]{hyndman_forecasting_2021}. The difference between standard Cross-Validation \parencite[241--248]{hastie_elements_2009} is that shuffling data points must be avoided because of data leakage. Furthermore, an expanding or a sliding window approach is employed. This procedure can be explained easily with a picture showing different training windows and forecasting horizons, as seen in \cref{fig:tscv}.
 \begin{figure}[htbp]
     \centering
     \includesvg[width=\textwidth]{images/cv_window.svg}
     \caption{This figure depicts ten different folds in a Timeseries Cross-Validation with a sliding window. The train window (blue) uses a fixed amount of data points, in this case, three years, and then the following points after the train window ends is the test set (yellow), as defined by the forecasting horizon.}
     \label{fig:tscv}
 \end{figure}
-This project uses a sliding window approach to keep the training window constant. This is because the final model used for the submission forecasts will also be trained on roughly the same amount of data. The motivation for this is that more than three to four years of data might not be helpful anymore to predict one week into the future. In addition, COVID-19 effects are included in the training window for the final model if the window is extended further. 
+This project uses a sliding windBikeproach to keep the training window constant. This is because the final model used for the submission forecasts will also be trained on roughly the same amount of data. At first, a constant three-year training window was selected. However, more data was significantly helpful for some models, especially for the Bikes target, where less data is available due to daily bike counts. Therefore, the training window uses all available data, starting in October 2012 for Bikes and in October 2015 for Energy.
 
-For each fold in the TSCV, several metrics are computed and then averaged over all folds. All metrics are reported with their corresponding standard deviation between folds. The main metric is the Pinball Loss defined by:
+\textbf{Evaluation metrics} can be computed for each fold in the TSCV and then can averaged over all folds. For this reason, all metrics computed during TSCV are reported with their corresponding standard deviation between folds. The main metric is the \textit{Pinball Loss} (also: Quantile Score) defined by:
 
 \begin{equation}
 \label{eq:PinballLoss}
@@ -40,21 +41,21 @@ For each fold in the TSCV, several metrics are computed and then averaged over a
 \end{cases}
 ,
 \end{equation}
-where $\hat{q}_\tau$ is the predictive $\tau$-quantile and y the observed value (NEEDS CITATION).
+where $\hat{q}_\tau$ is the predictive $\tau$-quantile and y the observed value \parencite[Chapter~5.9]{hyndman_forecasting_2021}.
 
-The Pinball Loss is computed for each quantile level $\tau \in \{0.025, 0.25, 0.5, 0.75, 0.975\}$, and then a sum over each Pinball Loss is computed. In addition to the Pinball Loss, which evaluates each quantile independently, interval metrics can be calculated involving two predictive quantiles. In this project, interval metrics are computed for the 50\% and 95\% central prediction interval (PI) as defined by the 25\%, 75\% quantiles and 2.5\%, 97.5\% quantiles, respectively. The interval score (IS) can be computed directly from the two involved pinball losses with
+The Pinball Loss is computed for each quantile level $\tau \in \{0.025, 0.25, 0.5, 0.75, 0.975\}$, then a sum over each Pinball Loss is computed. In addition to the Pinball Loss, which evaluates each quantile independently, interval metrics can be calculated involving two predictive quantiles. In this project, interval metrics are computed for the 50\% and 95\% central prediction interval (PI) as defined by the 25\%, 75\% quantiles and 2.5\%, 97.5\% quantiles, respectively. The \textit{interval score} (IS) can be computed directly from the two involved pinball losses with
 \begin{equation}
 \label{eq:IntervalScore}
 \text{IS}_{\alpha}(l, u, y) = \frac{\text{PB}_{\alpha/2}(l, y) + \text{PB}_{1-\alpha/2}(u, y)}{\alpha}.
 \end{equation}
-where $l$ and $u$ are the quantiles corresponding to the lower and upper bounds of the prediction interval, respectively. (NEEDS CITATION)
+where $l$ and $u$ are the quantiles corresponding to the lower and upper bounds of the prediction interval, respectively \parencite[370]{gneiting_strictly_2007}. 
 
-In addition, the empirical coverage of a prediction interval can be computed from 
+In addition, the \textit{empirical coverage} of a prediction interval can be computed from 
 observations $\{y_i\}_{i=1}^{n}$ using
 \begin{equation}
-    \text{Cvg}_{\alpha} = \frac{1}{n} \sum_{i = 1}^{n} \mathbbm{1}\{ \hat{q}_{\alpha/2} \leq y_i \leq \hat{q}_{1 - \alpha /2 } \} \,,
+    \text{Cvg}_{\alpha} = \frac{1}{n} \sum_{i = 1}^{n} \mathbf{1}\{ \hat{q}_{\alpha/2} \leq y_i \leq \hat{q}_{1 - \alpha /2 } \} \,,
 \end{equation}
-where $\mathbbm{1}(\cdot)$ is the indicator function, which takes the value one if the condition is true and zero otherwise.
+where $\mathbf{1}(\cdot)$ is the indicator function, which takes the value one if the condition is true and zero otherwise.
 The coverage calculates the fraction of observations inside the interval and should equal $1 - \alpha$ to properly resemble a $(1 - \alpha)$-\% prediction interval.
 
 
@@ -71,14 +72,9 @@ In general, the features can be categorized into the following sections:
 
 \textbf{Weather conditions} can significantly influence time series patterns, particularly in domains such as bike traffic. Therefore, weather-related variables such as temperature and precipitation are included. These features are derived from historical weather data using the OpenMeteo API and, where available, supplemented with forecasted values  \parencite{zippenfenig_open-meteocom_2024}.
 
-\textbf{Seasonality} is especially important for the two datasets at hand because they show significant daily, weekly, and yearly patterns. To represent recurring patterns, we include cyclical encodings in the form of sinus and cosinus transformations or simply dummy variables, e.g. encoding the current month with eleven binary dummies.
-% For a given time-based variable \( t \) with a periodicity of \( P \), we compute two features:
-% \begin{align}
-%     \text{sin\_encoding} &= \sin\left( \frac{2\pi t}{P} \right) \\
-%     \text{cos\_encoding} &= \cos\left( \frac{2\pi t}{P} \right)
-% \end{align}
+\textbf{Seasonality} is especially important for the two datasets at hand because they show significant daily, weekly, and yearly patterns. To represent recurring patterns, we include cyclical encodings in the form of sine and cosine transformations or simply dummy variables, e.g., encoding the current month with eleven binary dummies \parencite[Chapter~7.4]{hyndman_forecasting_2021}.
 
-\textbf{Lagged target values} provide historical context by introducing past observations as inputs to the model. We include both short-term lags (e.g., 1-day or 1-hour lag) to capture immediate trends and long-term lags (e.g., same time on the previous week or month).
+\textbf{Lagged target values} provide historical context by introducing past observations as inputs to the model. We include short-term lags (e.g., 1-day or 1-hour lag) to capture immediate trends and long-term lags (e.g., same time on the previous week or month).
 
 \textbf{Lagged exogenous variables} like weather variables can also be integrated but generally lead to many additional features. Therefore, the model has to somehow deal with the larger amount of features and select important lags.
 
@@ -91,8 +87,6 @@ In general, the features can be categorized into the following sections:
 This project is centered around a weekly forecasting challenge, where participants submit
 forecasts for their selected targets every Wednesday from October 23, 2024, until February 12, 2025. The weekly forecasts cover six specific forecast horizons. This section briefly describes how the weekly forecasts are calculated.
 
-First, the currently selected model is trained on all available data for both targets to partially exclude effects from the pandemic period and keep the training window similar to the one used during the evaluation.\footnote{At the beginning, only a three-year training window was selected but a longer training window seemed to help, especially for the bike target where less data is available due to daily counts.} This happens during the \textit{train} stage of the pipeline, and each model is saved to disk. In the \textit{submit} stage, this model is loaded into memory again and used to generate forecasts.
-A wider evaluation window 
-was used to evaluate models during the challenge to keep the evaluation consistent as the weekly forecasts progressed. However, after the challenge was finished, a backtest using the final version of each model was done to evaluate models on the specific dates of the forecasting challenge.
+The currently selected model is trained on all available data. This happens during the \textit{train} stage of the pipeline, and each model is saved to disk. In the \textit{submit} stage, this model is loaded into memory again and used to generate forecasts in an autoregressive manner. This means that the model predicts one time-step $t$ ahead and then uses the median prediction to generate the prediction for time-step $t+1$. Throughout the challenge, the currently best model on the internal validation using TSCV was selected, as it will be discussed in \cref{sec:Results:ComparisonModels}. After the challenge, models can be evaluated on the thirteen weeks in a similar fashion using TSCV. This is done in \cref{sec:Results:Backtest}.
 
 
