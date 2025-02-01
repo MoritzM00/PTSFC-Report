@@ -2,14 +2,14 @@
 \section{Models}
 \label{ch:Models}
 
-This chapter briefly describes the models that were used throughout the project. A standard practice in data science projects is to report metrics for simple baseline models to be able to compare more sophisticated approaches against them. The baseline models used here are described in \cref{sec:Models:Baselines}. As stated in the beginning, a focus is set on Gradient-Boosting decision trees, which are discussed in \cref{sec:Models:GBDT}.
+This chapter briefly describes the models that were used throughout the project. A standard practice in data science projects is to report metrics for simple baseline models to be able to compare more sophisticated approaches against them. The baseline models used here are described in \cref{sec:Models:Baselines}. As stated in the beginning, a focus is set on Gradient-Boosting decision trees, discussed in \cref{sec:Models:GBDT}.
 
-All models optimize one quantile level at a time, which means that quantile crossing can occur. A simple solution is quantile sorting, in which the predictive quantiles are sorted so that no quantile crossing occurs.
+All models discussed here optimize one quantile level at a time. Thus, when multiple quantile levels are of interest, several models must be trained. Because they do not optimize them jointly and strict monotonicity is not enforced between models, quantile crossing can occur. A simple solution is quantile sorting, in which the predictive quantiles are sorted so that no quantile crossing occurs.
 
 \subsection{Baseline Models}
 \label{sec:Models:Baselines}
 
-The first baseline model is a historical quantile-based approach, referred to as \textit{Benchmark}. The Benchmark simply computes quantiles based on the last $n = 100$ observations that share the same weekday and hour, which is a straightforward method to incorporate simple seasonalities in the data. The second baseline model is a linear quantile regression \parencite{koenker_regression_1978} which means that the conditional $\tau$-th quantile of $Y$ given some random variables $X = (X_1, \ldots, X_p)^T$ with $p \in \mathbb{N}$ is modeled as
+The first baseline model is a historical quantile-based approach, referred to as \textit{Benchmark}. The Benchmark computes quantiles based on the last $n = 100$ observations that share the same weekday and hour, which is a straightforward method to incorporate simple seasonalities in the data. The second baseline model is a linear quantile regression \parencite{koenker_regression_1978} which means that the conditional $\tau$-th quantile of $Y$ given some random variables $X = (X_1, \ldots, X_p)^T$ with $p \in \mathbb{N}$ is modeled as
 \begin{equation}
     q_\tau(Y | X) = \beta_1 X_1 + \cdots + \beta_p X_p \, .
 \end{equation}
@@ -18,17 +18,25 @@ The coefficients $\beta_1, \ldots, \beta_p$ are determined by minimizing the Pin
 \subsection{Gradient-Boosting Decision Trees}
 \label{sec:Models:GBDT}
 
-In Boosting, the general idea is to sequentially train an ensemble of base learners, where each base learner tries to improve upon the predictions of the previous one. \parencite[337]{hastie_elements_2009}. The base learner is often chosen to be a Decision Tree because it allows for very high flexibility and can cover a wide range of problems \parencite[350--352]{hastie_elements_2009}, thus popularizing Boosting Trees. Specifically, the final model is a sum of trees $T(x; \theta_m)$ parametrized by $\theta_m$:
+In Boosting, the general idea is to sequentially train an ensemble of base learners, where each base learner tries to improve upon the predictions of the previous one. \parencite[337]{hastie_elements_2009}. The base learner is often chosen to be a Decision Tree because it allows for very high flexibility and can cover a wide range of problems \parencite[350--352]{hastie_elements_2009}, thus popularizing Boosting Trees. Specifically, the final model is a sum of trees $T(x; \Theta_m)$ parametrized by $\theta_m$:
 \begin{equation}
-    f_M(x) = \sum_{i = 1}^M T(x; \theta_m) \, ,
+    f_M(x) = \sum_{i = 1}^M T(x; \Theta_m) \, ,
 \end{equation}
-where $M$ denotes the total number of steps or \enquote{boosts} taken. The parameters $\theta_m$ at step $m$ are obtained by optimization in a forward stagewise manner \parencite[356--357]{hastie_elements_2009}. In GBDT, this numerical optimization is done via Gradient descent. In this case, the individual tree predictions $T(x; \theta_m)$ can be seen as the direction of steepest descent, which is the negative gradient \parencite[359]{hastie_elements_2009}. For a detailed mathematical formulation of the numerical optimization procedure, see, for example, \cites[1189--1193]{friedman_greedy_2001}[353--360]{hastie_elements_2009}.
+where $M$ denotes the total number of steps or \enquote{boosts} taken. The parameters $\Theta_m$ at step $m$ are obtained by optimization of any differentiable loss function $\mathcal{L}$ in a forward stagewise manner \parencite[356--357]{hastie_elements_2009}:
+\begin{equation}
+    \label{eq:GBDT-optimization}
+    \hat{\Theta}_m=\arg \min _{\Theta_m} \sum_{i=1}^N \mathcal{L}\left(y_i, f_{m-1}(x_i)+T(x_i ; \Theta_m)\right) \, ,
+\end{equation}
+where $f_{m-1}$ is current model.
+In GBDT, this numerical optimization is done via Gradient descent. Hence, the individual tree predictions $T(x; \theta_m)$ can be seen as the direction of steepest descent, which is the negative gradient \parencite[359]{hastie_elements_2009}. For a detailed mathematical formulation of the numerical optimization procedure, see, for example, \cites[1189--1193]{friedman_greedy_2001}[353--360]{hastie_elements_2009}.
 
-In the following subsections, essential characteristics of each of the three popular GBDT-Libraries LightGBM \parencite{ke_lightgbm_2017}, XGBoost \parencite{chen_xgboost_2016}  and CatBoost \parencite{prokhorenkova_catboost_2017} are discussed.
+In the following subsections, essential characteristics of each of the three popular GBDT-Libraries LightGBM \parencite{ke_lightgbm_2017}, XGBoost \parencite{chen_xgboost_2016}  and CatBoost \parencite{prokhorenkova_catboost_2017} are discussed. Each of these algorithms is a variant of the traditional GBDT algorithm, but they differ regarding tree construction and split finding algorithms.
 
 \subsubsection{XGBoost}
 
-In eXtreme Gradient Boosting (XGBoost), ...
+In eXtreme Gradient Boosting (XGBoost), \cref{eq:GBDT-optimization} is modified to include a regularization term that controls the complexity of the trees \parencite[2]{chen_xgboost_2016}. This effectively leads to a pre-pruning strategy because it reduces the scoring function used for evaluating split candidates \parencites[1941--1942]{bentejac_comparative_2021}.\footnote{The hyperparameter that controls this regularization effect is called $\gamma$ in the original paper. It corresponds to the minimum gain needed to split a node.}
+Furthermore, XGBoost proposes a new approximate split finding algorithm to avoid iterating over all possible splits, which is infeasible if the dataset does not fit into memory \parencite[Chapter~3]{chen_xgboost_2016}. Instead, the basic idea is to divide a continuous feature into buckets based on percentiles of the feature distribution and then to find the best split candidate based on aggregated statistics \parencite[Chapter~3.2]{chen_xgboost_2016}.
+As XGBoost was designed to work efficiently with larger-than-memory datasets, it includes many technical optimizations such as the compressed column format for parallel sorting and cache-aware access \parencite[Chapter~4]{chen_xgboost_2016}.
 
 \subsubsection{LightGBM}
 \subsubsection{CatBoost}
