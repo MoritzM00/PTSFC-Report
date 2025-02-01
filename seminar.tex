@@ -65,6 +65,7 @@
 \usepackage{cleveref}
 \usepackage{svg}
 \usepackage[pdf]{graphviz}
+\usepackage[toc]{appendix}
 
 %% ====================================
 %% ====================================
@@ -100,12 +101,18 @@
 \input{sections/results.tex}
 \input{sections/conclusion.tex}
 
+
 %% --------------------
 %% |   Bibliography   |
 %% --------------------
 \newpage
 %% Add entry to the table of contents for the bibliography
 \printbibliography[heading=bibintoc]
+
+\newpage
+\begin{appendices}
+\input{sections/appendix}
+\end{appendices}
 
 \newpage
 \input{sections/declaration.tex}
