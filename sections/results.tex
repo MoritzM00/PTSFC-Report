@@ -2,10 +2,98 @@
 \section{Results}
 \label{ch:Results}
 
-In this chapter, the results of the forecasting challenge are discussed. First, in \cref{sec:Results:ComparisonModels} a comparison of the models is done on the internal validation scheme that was employed throughout the project to select models. Second, in \cref{sec:Results:Backtest} a backtest of the thirteen submission weeks is done to evaluate how models would have performed during the challenge. 
+In this chapter, the results of the forecasting challenge are discussed. First, in \cref{sec:Results:ComparisonModels}, a comparison of the models is made on the internal validation scheme employed throughout the project to select models. Second, in \cref{sec:Results:Backtest}, a backtest of the thirteen submission weeks is done to evaluate how models would have performed during the challenge. 
 
 \subsection{Comparison of models}
 \label{sec:Results:ComparisonModels}
+
+The results of the internal validation scheme using TSCV as described in \cref{sec:Methodology:Evaluation} are shown in \cref{tab:bikes_results} for the Bike Target and in \cref{tab:energy_results} for the Energy Target. 
+
+\begin{table}[htp]
+\centering
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{lrrrrr}
+\toprule
+Model & Pinball Loss & $\text{IS}_{0.5}$ & $\text{IS}_{0.05}$ & $\text{Cvg}_{0.5}$ & $\text{Cvg}_{0.05}$ \\
+\midrule
+Benchmark & 1226.14 (± 751.49) & 1343.29 (± 829.37) & 2897.77 (± 2099.89) & 0.53 (± 0.29) & \textbf{0.95 (± 0.13)} \\
+Quantile Regression & 1197.41 (± 602.68) & 1311.78 (± 698.27) & 2948.06 (± 1174.44) & \textbf{0.52 (± 0.26)} & 0.98 (± 0.07) \\
+CatBoost (Ordered) & 852.67 (± 358.28) & 931.40 (± 402.08) & 1888.97 (± 1164.80) & 0.38 (± 0.21) & 0.85 (± 0.17) \\
+XGBoost & 563.99 (± 259.31) & 602.74 (± 279.48) & 1618.93 (± 1114.08) & 0.31 (± 0.20) & 0.84 (± 0.16) \\
+CatBoost (Plain) & 539.69 (± 301.24) & \textbf{570.01 (± 313.35)} & 1664.76 (± 1369.76) & 0.36 (± 0.21) & 0.81 (± 0.19) \\
+LightGBM & \textbf{529.07 (± 251.59)} & 578.72 (± 285.86) & \textbf{1337.58 (± 646.38)} & 0.36 (± 0.23) & 0.90 (± 0.12) \\
+\bottomrule
+\end{tabular}}
+\caption{Results of Timeseries Cross-Validation on the Bike Target for the full year 2024 with weekly shifting of sliding windows. Best values are highlighted in bold.}
+\label{tab:bikes_results}
+\end{table}
+
+All GBDT-Models outperform the baseline models, namely the benchmark and linear quantile regression
+regarding the Pinball Loss. However, the empirical coverages are much better for the baseline models.
+
+\begin{table}[htp]
+\centering
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{lrrrrr}
+\toprule
+Model & Pinball Loss & $\text{IS}_{0.5}$ & $\text{IS}_{0.05}$ & $\text{Cvg}_{0.5}$ & $\text{Cvg}_{0.05}$ \\
+\midrule
+Benchmark & 5.12 (± 2.68) & 5.60 (± 2.92) & 11.20 (± 6.94) & \textbf{0.52 (± 0.30)} & \textbf{0.94 (± 0.13)} \\
+Quantile Regression & 4.49 (± 2.37) & 4.60 (± 2.97) & 17.28 (± 1.61) & 0.47 (± 0.18) & 0.97 (± 0.05) \\
+CatBoost (Ordered) & 3.55 (± 1.88) & 3.87 (± 1.92) & 8.59 (± 7.61) & 0.43 (± 0.14) & 0.89 (± 0.13) \\
+XGBoost & 2.32 (± 1.21) & 2.47 (± 1.17) & 6.80 (± 6.57) & 0.37 (± 0.12) & 0.81 (± 0.16) \\
+LightGBM & 2.30 (± 1.16) & 2.47 (± 1.15) & 6.42 (± 5.58) & 0.38 (± 0.13) & 0.83 (± 0.15) \\
+CatBoost (Plain) & \textbf{2.25 (± 1.14)} & \textbf{2.42 (± 1.12)} & \textbf{5.98 (± 5.73)} & 0.39 (± 0.14) & 0.84 (± 0.15) \\
+\bottomrule
+\end{tabular}}
+\caption{Results of Timeseries Cross-Validation on the Energy Target for the full year 2024 with weekly shifting of sliding windows. Best values are highlighted in bold.}
+\label{tab:energy_results}
+\end{table}
+
+The coverage of the 95\% prediction interval $\text{Cvg}_{0.05}$ is below 85\% for most GBDT-Models and the coverage for the 50\% prediction interval is even worse. This means, that the GBDT-Models probably still overfit to the training data due to the included lagged target values and are thus too confident in their predictions. It was observed that too many lags decrease the coverage substantially but some are very helpful for decreasing the pinball loss. A visual inspection of the narrow prediction intervals for the CatBoost model is given in \cref{fig:Forecast-visualization} 
+Only CatBoost achieves better coverage values when the ordered boosting type is used on the Energy
+Target, at the cost of a much higher Pinball Loss. This can be evaluated visually with the Calibration shown in \cref{fig:calibration-comparison} where the calibration of CatBoost (\cref{fig:catboost-ordered-calibration}) is compared against the calibration of LightGBM (\cref{fig:lgbm-calibration}).
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/catboost-ordered-energy-calibration.svg}
+        \caption{CatBoost (Ordered)}
+        \label{fig:catboost-ordered-calibration}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/lgbm-energy-calibration.svg}
+        \caption{LightGBM}
+        \label{fig:lgbm-calibration}
+    \end{subfigure}
+    \caption{Calibration plots for two selected models on the Energy Target. It shows that the GBDT-Models exhibit a slight S-Curve, meaning that lower quantile levels are too high on average and higher quantile levels are too low. CatBoost with the \texttt{boosting\_type=Ordered} parameter set, is slightly better calibrated than LightGBM at the cost of a higher Pinball Loss. XGBoost is very similar to LightGBM in this regard.}
+    \label{fig:calibration-comparison}
+\end{figure}
+
+CatBoost also supports the standard (Plain) gradient-
+boosting algorithm, and with this, it performs on par with LightGBM and even outperforms it slightly on
+the Energy Target. However, this is highly hyper-parameter dependent, and the standard
+deviation is generally relatively high. The chosen hyper-parameters deviate from the default 
+configuration to prevent overfitting and are described in more detail in \cref{appendix:GBDT-configs}.\footnote{For example, the default parameters of LightGBM allow for trees with unlimited depth, restricting them only to a maximum of 32 leaves. This can lead to overfitting because nodes are expanded best first during tree construction. Also, many randomization settings, such as row and column subsampling, are disabled by default.}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.95\textwidth}
+        \centering
+        \includesvg[width=1\linewidth]{images/catboost-energy-plot-1.svg}
+        \caption{Forecasts for the week starting on January 2nd, 2024. At this time of the year, a higher uncertainty is expected due to holiday effects. This is also reflected in the slightly wider 50\% and 95\% prediction intervals. However, it is still at times too narrow and completely misses the actual time-series shown in black.}
+        \label{fig:forecast-plot-1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.95\textwidth}
+        \centering
+        \includesvg[width=1\linewidth]{images/catboost-energy-plot-2.svg}
+        \caption{Forecasts for a regular week in September 2024. The prediction intervals are slightly narrower than for the week shown in (a). However, they overestimate all quantiles for many timesteps in this week. The problem is exaggerated for the weekend starting with September 21, 2024, where the model overestimates the quantiles for almost all timesteps.}
+        \label{fig:forecast-plot-2}
+    \end{subfigure}
+    \caption{Two forecast visualizations of the best model on the Energy Target, made during the TSCV for model selection as described in \cref{sec:Methodology:Evaluation}. It shows two TSCV folds, corresponding to two weeks in this setup. In black, the actual time-series is shown, and the dotted blue line is the predictive median. The shaded area shows the 50\% and 95\% prediction interval. (a) The first week of 2024 starting on Tuesday, 2nd, and (b) a regular week without holiday effects. It shows that the prediction intervals are often too narrow, which means the model is overconfident with its predictions. This could be due to the inclusion of too many lags, which decreases coverage levels. However, the model learned the higher uncertainty due to the holiday and seasonality effects in the first week of a year reflected by wider prediction intervals.}
+    \label{fig:Forecast-visualization}
+\end{figure}
 
 
 \subsection{Backtest for the weekly forecasting challenge}

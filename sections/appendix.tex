@@ -34,3 +34,61 @@ LightGBM & \textbf{2.11 (± 0.94)} & \textbf{2.27 (± 0.92)} & \textbf{5.68 (± 
 \caption{Results of Timeseries Cross-Validation on the Hourly Electricity Demand Dataset. Best values are highlighted in bold.}
 \label{tab:energy_results}
 \end{table}
+
+\section{Configuration for GBDT models}
+
+In this section, the configuration for the GBDT models is explained in more detail. \Cref{tab:model-config} shows the configuration for the three models on the Bike Target. For these models, the following parameters are used to control the behavior and complexity in the gradient-boosting algorithm described in \cref{sec:Models:GBDT}: (NEED CITATION)
+
+\begin{description}
+  \item[\textbf{n\_estimators}] The number of trees (boosting rounds) built during training. Increasing this number can improve model performance but may also increase the risk of overfitting and computational cost.
+  
+  \item[\textbf{learning\_rate}] A shrinkage factor that scales the contribution of each tree. Lower values typically require more trees for convergence but can lead to better generalization by preventing overly aggressive updates.
+  
+  \item[\textbf{max\_depth}] The maximum depth of each individual tree. Deeper trees allow the model to capture more complex interactions but can also lead to overfitting. This parameter helps in controlling the model’s complexity. Note that the effectiveness of this parameter depends on how the trees are constructed (e.g. leaf-wise vs. depth-wise).
+
+  \item[\textbf{num\_leaves}] The maximum number of leaves (i.e. terminal nodes) per tree. A larger value increases the model’s capacity but may also lead to overfitting. This is the primary and preferred way of limiting tree complexity in LightGBM due to its leaf-wise (best-first) node expansion.
+  
+  \item[\textbf{tree\_method}] (XGBoost-specific) The algorithm used for constructing trees. For example, the \texttt{hist} method builds histograms to accelerate training and reduce memory usage. Other available algorithms are \texttt{exact} (full enumeration of all split points) and \texttt{approx} (Approximate algorithm as outlined in \cite[Chapter~3.2]{chen_xgboost_2016}).
+  
+  \item[\textbf{grow\_policy}] The strategy for expanding trees during training. Options such as \texttt{depthwise} (used in XGBoost) or \texttt{SymmetricTree} (used in CatBoost) influence the structure of the trees and can affect performance. XGboost also supports leaf-wise growth. CatBoost supports all three options. This parameter is not available in LightGBM as it only supports leaf-wise growth.
+  
+  \item[\textbf{colsample\_bylevel}] The fraction of features randomly sampled for each level of the tree. This parameter introduces randomness into the model by only evaluating a subset of features for splitting, which can help reduce overfitting by de-correlating the trees.
+  
+  \item[\textbf{colsample\_bytree}] Similar to \texttt{colsample\_bylevel}, this parameter can also help prevent overfitting by only using a fraction of features for split evaluation. For this parameter, the subsampling is done once in each boosting iteration.
+
+  \item[\textbf{min\_child\_samples}] The minimum number of data samples required in a leaf. This parameter acts as a regularizer by ensuring that leaves have enough data to make reliable predictions.
+  
+  \item[\textbf{reg\_lambda}] The L2 regularization term on leaf weights. Higher values impose a stronger penalty on large weights, which can help control overfitting.
+  
+\end{description}
+\label{appendix:GBDT-configs}
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{@{} lccc @{}}
+    \toprule
+    \textbf{Parameter} & \textbf{XGBoost} & \textbf{LightGBM} & \textbf{CatBoost} \\ 
+    \midrule
+    \multicolumn{4}{l}{\textbf{Feature-specific parameters}} \\
+    Lagged target values& $1,2,6,7,14,21,28$ & $1,2,6,7,8,14,21,28$ & $1,2,6,7,14,21,28$ \\
+    Include seasonal encodings & true & true & true \\
+    Use cyclical Encodings & true & true & true \\
+    Include rolling stats & false & false & false \\
+    Lagged exogenous variables & All & All & All \\
+    \midrule
+    \multicolumn{4}{l}{\textbf{GBDT-specific parameters}} \\
+    n\_estimators & 250 & 250 & 250 \\
+    num\_leaves & -- & 15 & -- \\
+    min\_child\_samples & -- & 50 & -- \\
+    grow\_policy & depthwise & leafwise & SymmetricTree \\
+    learning\_rate & 0.1 & 0.1 & 0.1 \\
+    max\_depth & 6 & 6 & 6 \\
+    colsample\_bylevel & 0.6 & -- & 0.6 \\
+    colsample\_bytree & -- & 0.6 & -- \\
+    subsample & 0.9 & 0.9 & 0.9 \\
+    reg\_lambda & -- & 1 & 1e-2 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Configuration for the three GBDT implementations XGBoost, LightGBM, and CatBoost.}
+  \label{tab:model-config}
+\end{table}
+

@@ -2,7 +2,7 @@
 \section{Methodology}
 \label{ch:Methodology}
 
-This chapter gives a detailed explanation of the methodology of this project. The pipeline is introduced in \cref{sec:Methodology:Pipeline}, followed by how models are evaluated internally in \cref{sec:Methodology:Evaluation}. Then, the feature engineering is presented in \cref{sec:Methodology:FeatureEngineering}.
+This chapter gives a detailed explanation of the methodology of this project. First, the pipeline is introduced in \cref{sec:Methodology:Pipeline}, followed by a description of the forecasting challenge in \cref{sec:Methodology:ForecastingChallenge}. Third, the evaluation in the context of probabilistic time-series forecasting is discussed in \cref{sec:Methodology:Evaluation}, and fourth, the feature engineering is presented in \cref{sec:Methodology:FeatureEngineering}.
 Finally, the weekly forecasting challenge and how predictions are generated will be discussed in \cref{sec:Methodology:ForecastingChallenge}.
 
 
@@ -18,6 +18,14 @@ Typical data science projects are developed iteratively, making a reproducible a
 \end{figure}
 The pipeline consists of four steps: First, the data is prepared by fetching relevant information from APIs. In this step, weather features using the OpenMeteo API are also generated. Second, models are trained and saved to disk for later use and inspection. Third, time-series cross-validation is performed, and all relevant metrics and visual inspections are calculated and plotted. More details on the evaluation are given in \cref{sec:Methodology:Evaluation}. Finally, out-of-sample forecasts for the specific forecasting horizons are generated and saved in the required format.
 
+\subsection{Weekly Forecasting Challenge}
+\label{sec:Methodology:ForecastingChallenge}
+
+This project is centered around a weekly forecasting challenge, where participants submit
+forecasts for their selected targets every Wednesday from October 23, 2024, until February 12, 2025. The weekly forecasts cover six specific forecast horizons. This section briefly describes how the weekly forecasts are calculated.
+
+The currently selected model is trained on all available data. This happens during the \textit{train} stage of the pipeline, and each model is saved to disk. In the \textit{submit} stage, this model is loaded into memory again and used to generate forecasts in an autoregressive manner. This means that the model predicts one time-step $t$ ahead and then uses the median prediction to generate the prediction for time-step $t+1$. Throughout the challenge, the currently best model on the internal validation using TSCV was selected, as it will be discussed in \cref{sec:Methodology:Evaluation}. After the challenge, models can be evaluated on the thirteen weeks in a similar fashion using TSCV. This is done in \cref{sec:Results:Backtest}.
+
 \subsection{Evaluation}
 \label{sec:Methodology:Evaluation}
 
@@ -28,9 +36,11 @@ This section briefly describes how the models are evaluated using \textbf{Timese
     \caption{This figure depicts ten different folds in a Timeseries Cross-Validation with a sliding window. The train window (blue) uses a fixed amount of data points, in this case, three years, and then the following points after the train window ends is the test set (yellow), as defined by the forecasting horizon.}
     \label{fig:tscv}
 \end{figure}
-This project uses a sliding windBikeproach to keep the training window constant. This is because the final model used for the submission forecasts will also be trained on roughly the same amount of data. At first, a constant three-year training window was selected. However, more data was significantly helpful for some models, especially for the Bikes target, where less data is available due to daily bike counts. Therefore, the training window uses all available data, starting in October 2012 for Bikes and in October 2015 for Energy.
+This project uses a sliding window approach to keep the training window constant. This is because the final model used for the submission forecasts will also be trained on roughly the same amount of data. At first, a constant three-year training window was selected. However, more data was significantly helpful for some models, especially for the Bike target, where less data is available due to daily bike counts. Therefore, the training window uses all available data, starting in October 2012 for Bikes and in October 2015 for Energy.
 
-\textbf{Evaluation metrics} can be computed for each fold in the TSCV and then can averaged over all folds. For this reason, all metrics computed during TSCV are reported with their corresponding standard deviation between folds. The main metric is the \textit{Pinball Loss} (also: Quantile Score) defined by:
+The different models will be compared using TSCV using 52 folds (weeks) starting from October 23, 2023, and ending right before the challenge starts on October 23, 2024. To keep the evaluation similar to the setup of the weekly forecasting challenge as described previously in \cref{sec:Methodology:ForecastingChallenge}, a weekly forecasting horizon and window shifting is used, meaning that models generate one-week ahead forecasts, then the sliding window shifts by one week and the models are retrained to generate the forecasts for next week and so on.
+
+\textbf{Evaluation metrics} are computed for each fold in the TSCV and are then averaged over all folds. For this reason, all metrics computed during TSCV are reported with their corresponding standard deviation between folds. The main metric is the \textit{Pinball Loss} (also: Quantile Score) defined by:
 
 \begin{equation}
 \label{eq:PinballLoss}
@@ -80,13 +90,6 @@ In general, the features can be categorized into the following sections:
 
 \textbf{Holidays} often introduce irregular patterns in time series data. To account for these effects, we include a binary holiday indicator that marks whether a given time step corresponds to a public holiday or a significant event. This helps the model distinguish between typical and exceptional time periods, allowing it to adjust for fluctuations caused by holidays.
 
-
-\subsection{Weekly Forecasting Challenge}
-\label{sec:Methodology:ForecastingChallenge}
-
-This project is centered around a weekly forecasting challenge, where participants submit
-forecasts for their selected targets every Wednesday from October 23, 2024, until February 12, 2025. The weekly forecasts cover six specific forecast horizons. This section briefly describes how the weekly forecasts are calculated.
-
-The currently selected model is trained on all available data. This happens during the \textit{train} stage of the pipeline, and each model is saved to disk. In the \textit{submit} stage, this model is loaded into memory again and used to generate forecasts in an autoregressive manner. This means that the model predicts one time-step $t$ ahead and then uses the median prediction to generate the prediction for time-step $t+1$. Throughout the challenge, the currently best model on the internal validation using TSCV was selected, as it will be discussed in \cref{sec:Results:ComparisonModels}. After the challenge, models can be evaluated on the thirteen weeks in a similar fashion using TSCV. This is done in \cref{sec:Results:Backtest}.
+\textbf{Rolling-window computations}, e.g. the rolling median of the last 100 days is often included as well for tabular regressors. In this project, the rolling median is motivated by the benchmark model and is thus computed by taking the rolling median of all observations sharing the same weekday (and hour, if applicable).
 
 
