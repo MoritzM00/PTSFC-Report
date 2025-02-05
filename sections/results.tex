@@ -2,7 +2,7 @@
 \section{Results}
 \label{ch:Results}
 
-In this chapter, the results of the forecasting challenge are discussed. First, in \cref{sec:Results:ComparisonModels}, a comparison of the models is made on the internal validation scheme employed throughout the project to select models. Second, in \cref{sec:Results:Backtest}, a backtest of the thirteen submission weeks is done to evaluate how models would have performed during the challenge. 
+In this chapter, the results of the forecasting challenge are discussed. First, in \cref{sec:Results:ComparisonModels}, a comparison of the models is made on the internal validation scheme employed throughout the project to select models. Second, in \cref{sec:Results:Backtest}, a backtest of the 13 submission weeks is performed to evaluate how the models would have performed during the challenge. 
 
 \subsection{Comparison of models}
 \label{sec:Results:ComparisonModels}
@@ -28,7 +28,7 @@ LightGBM & \textbf{529.07 (± 251.59)} & 578.72 (± 285.86) & \textbf{1337.58 (�
 \label{tab:bikes_results}
 \end{table}
 
-All GBDT-Models outperform the baseline models, namely the benchmark and linear quantile regression
+All GBDT models outperform the baseline models, namely the benchmark and linear quantile regression
 regarding the Pinball Loss. However, the empirical coverages are much better for the baseline models.
 
 \begin{table}[htp]
@@ -50,9 +50,9 @@ CatBoost (Plain) & \textbf{2.25 (± 1.14)} & \textbf{2.42 (± 1.12)} & \textbf{5
 \label{tab:energy_results}
 \end{table}
 
-The coverage of the 95\% prediction interval $\text{Cvg}_{0.05}$ is below 85\% for most GBDT-Models and the coverage for the 50\% prediction interval is even worse. This means, that the GBDT-Models probably still overfit to the training data due to the included lagged target values and are thus too confident in their predictions. It was observed that too many lags decrease the coverage substantially but some are very helpful for decreasing the pinball loss. A visual inspection of the narrow prediction intervals for the CatBoost model is given in \cref{fig:Forecast-visualization} 
+The coverage of the 95\% prediction interval $\text{Cvg}_{0.05}$ is below 85\% for most GBDT-Models and the coverage for the 50\% prediction interval is even worse. This means that the GBDT models probably still overfit the training data due to the included lagged target values, and thus are too confident in their predictions. It was observed that too many lags reduce the coverage substantially, but some are very helpful in reducing the pinball loss. A visual inspection of the narrow prediction intervals for the CatBoost model is given in \cref{fig:Forecast-visualization}.
 Only CatBoost achieves better coverage values when the ordered boosting type is used on the Energy
-Target, at the cost of a much higher Pinball Loss. This can be evaluated visually with the Calibration shown in \cref{fig:calibration-comparison} where the calibration of CatBoost (\cref{fig:catboost-ordered-calibration}) is compared against the calibration of LightGBM (\cref{fig:lgbm-calibration}).
+Target, at the cost of a much higher Pinball Loss. This can be visually evaluated with the calibration plots shown in \cref{fig:calibration-comparison} where the CatBoost calibration (\cref{fig:catboost-ordered-calibration}) is compared to the LightGBM calibration (\cref{fig:lgbm-calibration}).
 \begin{figure}[htbp]
     \centering
     \begin{subfigure}[b]{0.5\textwidth}
@@ -67,15 +67,15 @@ Target, at the cost of a much higher Pinball Loss. This can be evaluated visuall
         \caption{LightGBM}
         \label{fig:lgbm-calibration}
     \end{subfigure}
-    \caption{Calibration plots for two selected models on the Energy Target. It shows that the GBDT-Models exhibit a slight S-Curve, meaning that lower quantile levels are too high on average and higher quantile levels are too low. CatBoost with the \texttt{boosting\_type=Ordered} parameter set, is slightly better calibrated than LightGBM at the cost of a higher Pinball Loss. XGBoost is very similar to LightGBM in this regard.}
+    \caption{Calibration plots for two selected models on the Energy Target. It shows that the GBDT-Models  tend to over-estimate the lower quantiles $\hat{q}_{0.025}$, $\hat{q}_{0.25}$ and under-estimate the upper levels $\hat{q}_{0.075}$, $\hat{q}_{0.975}$. CatBoost with the \texttt{boosting\_type=Ordered} parameter set, is slightly better calibrated than LightGBM at the cost of a higher Pinball Loss. XGBoost is very similar to LightGBM in this regard.}
     \label{fig:calibration-comparison}
 \end{figure}
 
-CatBoost also supports the standard (Plain) gradient-
-boosting algorithm, and with this, it performs on par with LightGBM and even outperforms it slightly on
-the Energy Target. However, this is highly hyper-parameter dependent, and the standard
+CatBoost also supports the standard (Plain) gradient-boosting algorithm,
+and with this, it performs on par with LightGBM and even outperforms it slightly on
+the Energy Target. However, this is highly hyperparameter-dependent, and the standard
 deviation is generally relatively high. The chosen hyper-parameters deviate from the default 
-configuration to prevent overfitting and are described in more detail in \cref{appendix:GBDT-configs}.\footnote{For example, the default parameters of LightGBM allow for trees with unlimited depth, restricting them only to a maximum of 32 leaves. This can lead to overfitting because nodes are expanded best first during tree construction. Also, many randomization settings, such as row and column subsampling, are disabled by default.}
+configuration to prevent overfitting and are described in more detail in Appendix~\ref{appendix:GBDT-configs}.\footnote{For example, the default parameters of LightGBM allow for trees with unlimited depth, restricting them only to a maximum of 32 leaves. This can lead to overfitting because nodes are expanded best first during tree construction. In addition, many randomization settings, such as subsampling of rows and columns, are disabled by default.}
 
 \begin{figure}[htbp]
     \centering
