@@ -1,40 +1,3 @@
-\section{Some appendix}
-
-\begin{table}[htp]
-\centering
-\resizebox{\columnwidth}{!}{
-\begin{tabular}{lrrrrr}
-\toprule
-Model & Pinball Loss & $\text{IS}_{0.5}$ & $\text{IS}_{0.05}$ & $\text{Cvg}_{0.5}$ & $\text{Cvg}_{0.05}$ \\
-\midrule
-Benchmark & 1650.40 (± 1005.15) & 1783.74 (± 1083.36) & 3506.96 (± 3460.92) & \textbf{0.50 (± 0.33)} & 0.94 (± 0.13) \\
-Quantile Regression & 1332.65 (± 672.08) & 1457.22 (± 760.20) & 3451.07 (± 1996.65) & 0.51 (± 0.23) & \textbf{0.95 (± 0.11)} \\
-XGBoost & 866.18 (± 586.12) & 877.21 (± 522.47) & 3461.69 (± 3892.43) & 0.28 (± 0.17) & 0.69 (± 0.21) \\
-CatBoost & 864.10 (± 606.43) & 929.71 (± 603.05) & \textbf{2275.28 (± 3007.96)} & 0.47 (± 0.24) & 0.90 (± 0.18) \\
-LightGBM & \textbf{746.70 (± 506.56)} & \textbf{783.77 (± 504.98)} & 2495.39 (± 2542.55) & 0.31 (± 0.20) & 0.78 (± 0.21) \\
-\bottomrule
-\end{tabular}}
-\caption{Results of Timeseries Cross-Validation on the Daily Bike Count Dataset. Best values are highlighted in bold.}
-\label{tab:bikes_results}
-\end{table}
-
-\begin{table}[htp]
-\resizebox{\columnwidth}{!}{
-\begin{tabular}{lrrrrr}
-\toprule
-Model & Pinball Loss & $\text{IS}_{0.5}$ & $\text{IS}_{0.05}$ & $\text{Cvg}_{0.5}$ & $\text{Cvg}_{0.05}$ \\
-\midrule
-Benchmark & 6.03 (± 3.53) & 6.70 (± 3.83) & 13.16 (± 11.83) & 0.49 (± 0.35) & 0.93 (± 0.14) \\
-Quantile Regression & 4.58 (± 3.12) & 4.69 (± 4.00) & 18.13 (± 1.08) & \textbf{0.49 (± 0.17)} & \textbf{0.97 (± 0.04)} \\
-CatBoost & 2.86 (± 2.59) & 3.09 (± 2.62) & 7.18 (± 10.54) & 0.45 (± 0.17) & 0.91 (± 0.13) \\
-XGBoost & 2.38 (± 1.22) & 2.51 (± 1.15) & 7.28 (± 6.23) & 0.37 (± 0.10) & 0.81 (± 0.12) \\
-LightGBM & \textbf{2.11 (± 0.94)} & \textbf{2.27 (± 0.92)} & \textbf{5.68 (± 4.74)} & 0.39 (± 0.10) & 0.87 (± 0.09) \\
-\bottomrule
-\end{tabular}}
-\caption{Results of Timeseries Cross-Validation on the Hourly Electricity Demand Dataset. Best values are highlighted in bold.}
-\label{tab:energy_results}
-\end{table}
-
 \section{Configuration for GBDT models}
 
 In this section, the configuration for the GBDT models is explained in more detail. \Cref{tab:model-config} shows the configuration for the three models on the Bike Target. For these models, the following parameters are used to control the behavior and complexity in the gradient-boosting algorithm described in \cref{sec:Models:GBDT}: (NEED CITATION)
@@ -92,3 +55,263 @@ In this section, the configuration for the GBDT models is explained in more deta
   \label{tab:model-config}
 \end{table}
 
+\newpage
+\section{Additional Visualizations}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.95\textwidth}
+        \centering
+        \includesvg[width=1\linewidth]{images/catboost-energy-plot-1.svg}
+        \caption{Forecasts for the week starting on January 2nd, 2024. At this time of the year, a higher uncertainty is expected due to holiday effects. This is also reflected in the slightly wider 50\% and 95\% prediction intervals. However, it is still at times too narrow and completely misses the actual time-series shown in black.}
+        \label{fig:forecast-plot-1}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.95\textwidth}
+        \centering
+        \includesvg[width=1\linewidth]{images/catboost-energy-plot-2.svg}
+        \caption{Forecasts for a regular week in September 2024. The prediction intervals are slightly narrower than for the week shown in (a). However, they overestimate all quantiles for many timesteps in this week. The problem is exaggerated for the weekend starting with September 21, 2024, where the model overestimates the quantiles for almost all timesteps.}
+        \label{fig:forecast-plot-2}
+    \end{subfigure}
+    \caption{Two forecast visualizations of the best model on the Energy Target, made during the TSCV for model selection as described in \cref{sec:Methodology:Evaluation}. It shows two TSCV folds, corresponding to two weeks in this setup. In black, the actual time-series is shown, and the dotted blue line is the predictive median. The shaded area shows the 50\% and 95\% prediction interval. (a) The first week of 2024 starting on Tuesday, 2nd, and (b) a regular week without holiday effects. It shows that the prediction intervals are often too narrow, which means the model is overconfident with its predictions. This could be due to the inclusion of too many lags, which decreases coverage levels. However, the model learned the higher uncertainty due to the holiday and seasonality effects in the first week of a year reflected by wider prediction intervals.}
+    \label{fig:Forecast-visualization}
+\end{figure}
+
+
+\begin{figure}[htbp]
+    \centering
+    % First row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_forecast/small-orfe_output_eval_plots_bikes_forecast_3.svg}
+        \caption{Linear Quantile Regression}
+        \label{fig:small-orfe}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_forecast/armed-play_output_eval_plots_bikes_forecast_3.svg}
+        \caption{Benchmark}
+        \label{fig:armed-play}
+    \end{subfigure}
+
+    % second row 
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_forecast/mangy-flux_output_eval_plots_bikes_forecast_3.svg}
+        \caption{LightGBM}
+        \label{fig:mangy-flux}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_forecast/couth-ruby_output_eval_plots_bikes_forecast_3.svg}
+        \caption{XGBoost}
+        \label{fig:couth-ruby}
+    \end{subfigure}
+    % third row
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_forecast/civil-leas_output_eval_plots_bikes_forecast_3.svg}
+        \caption{Ordered CatBoost}
+        \label{fig:civil-leas}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_forecast/blear-dita_output_eval_plots_bikes_forecast_3.svg}
+        \caption{Plain CatBoost}
+        \label{fig:blear-dita}
+    \end{subfigure}%
+    
+    \caption{Forecast visualizations of six different models during TSCV on the Bikes Target, showcasing some characteristics of each model.}
+    \label{fig:bikes_forecast}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    % First row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_forecast/small-orfe_output_eval_plots_energy_forecast_3.svg}
+        \caption{Linear Quantile Regression}
+        \label{fig:small-orfe-energy}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_forecast/armed-play_output_eval_plots_energy_forecast_3.svg}
+        \caption{Benchmark}
+        \label{fig:armed-play-energy}
+    \end{subfigure}
+
+    % Second row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_forecast/mangy-flux_output_eval_plots_energy_forecast_3.svg}
+        \caption{LightGBM}
+        \label{fig:mangy-flux-energy}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_forecast/couth-ruby_output_eval_plots_energy_forecast_3.svg}
+        \caption{XGBoost}
+        \label{fig:couth-ruby-energy}
+    \end{subfigure}
+    
+    % Third row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_forecast/civil-leas_output_eval_plots_energy_forecast_3.svg}
+        \caption{Ordered CatBoost}
+        \label{fig:civil-leas-energy}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_forecast/blear-dita_output_eval_plots_energy_forecast_3.svg}
+        \caption{Plain CatBoost}
+        \label{fig:blear-dita-energy}
+    \end{subfigure}%
+    
+    \caption{Forecast visualizations of six different models during TSCV on the Energy Target, showcasing some characteristics of each model.}
+    \label{fig:energy_forecast}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    % First row: two calibration curves
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_calibration/small-orfe_output_eval_plots_bikes_calibration_curve.svg}
+        \caption{Linear Quantile Regression Calibration}
+        \label{fig:small-orfe-calibration}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_calibration/armed-play_output_eval_plots_bikes_calibration_curve.svg}
+        \caption{Benchmark Calibration}
+        \label{fig:armed-play-calibration}
+    \end{subfigure}
+    
+    % Second row: two calibration curves
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_calibration/mangy-flux_output_eval_plots_bikes_calibration_curve.svg}
+        \caption{LightGBM Calibration}
+        \label{fig:mangy-flux-calibration}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_calibration/couth-ruby_output_eval_plots_bikes_calibration_curve.svg}
+        \caption{XGBoost Calibration}
+        \label{fig:couth-ruby-calibration}
+    \end{subfigure}
+    
+    % Third row: two calibration curves
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_calibration/civil-leas_output_eval_plots_bikes_calibration_curve.svg}
+        \caption{Ordered CatBoost Calibration}
+        \label{fig:civil-leas-calibration}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_calibration/blear-dita_output_eval_plots_bikes_calibration_curve.svg}
+        \caption{Plain CatBoost Calibration}
+        \label{fig:blear-dita-calibration}
+    \end{subfigure}
+    
+    \caption{Calibration curves of six different models on the Bikes Target, illustrating the calibration performance of each model.}
+    \label{fig:bikes_calibration}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    % First row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_pinball/small-orfe_output_energy_pinball_losses.svg}
+        \caption{Linear Quantile Regression Pinball Losses}
+        \label{fig:small-orfe-pinball-energy}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_pinball/armed-play_output_energy_pinball_losses.svg}
+        \caption{Benchmark Pinball Losses}
+        \label{fig:armed-play-pinball-energy}
+    \end{subfigure}
+    
+    % Second row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_pinball/mangy-flux_output_energy_pinball_losses.svg}
+        \caption{LightGBM Pinball Losses}
+        \label{fig:mangy-flux-pinball-energy}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_pinball/couth-ruby_output_energy_pinball_losses.svg}
+        \caption{XGBoost Pinball Losses}
+        \label{fig:couth-ruby-pinball-energy}
+    \end{subfigure}
+    
+    % Third row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_pinball/civil-leas_output_energy_pinball_losses.svg}
+        \caption{Ordered CatBoost Pinball Losses}
+        \label{fig:civil-leas-pinball-energy}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_pinball/blear-dita_output_energy_pinball_losses.svg}
+        \caption{Plain CatBoost Pinball Losses}
+        \label{fig:blear-dita-pinball-energy}
+    \end{subfigure}
+    
+    \caption{Pinball Losses for six different models on the Energy Forecast.}
+    \label{fig:energy_pinball}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    % First row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_pinball/small-orfe_output_bikes_pinball_losses.svg}
+        \caption{Linear Quantile Regression Pinball Losses}
+        \label{fig:small-orfe-pinball-bikes}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_pinball/armed-play_output_bikes_pinball_losses.svg}
+        \caption{Benchmark Pinball Losses}
+        \label{fig:armed-play-pinball-bikes}
+    \end{subfigure}
+    
+    % Second row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_pinball/mangy-flux_output_bikes_pinball_losses.svg}
+        \caption{LightGBM Pinball Losses}
+        \label{fig:mangy-flux-pinball-bikes}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_pinball/couth-ruby_output_bikes_pinball_losses.svg}
+        \caption{XGBoost Pinball Losses}
+        \label{fig:couth-ruby-pinball-bikes}
+    \end{subfigure}
+    
+    % Third row: two images
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_pinball/civil-leas_output_bikes_pinball_losses.svg}
+        \caption{Ordered CatBoost Pinball Losses}
+        \label{fig:civil-leas-pinball-bikes}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/bikes_pinball/blear-dita_output_bikes_pinball_losses.svg}
+        \caption{Plain CatBoost Pinball Losses}
+        \label{fig:blear-dita-pinball-bikes}
+    \end{subfigure}
+    
+    \caption{Pinball Losses for six different models on the Bikes Forecast.}
+    \label{fig:bikes_pinball}
+\end{figure}

@@ -3,11 +3,13 @@
 %% 
 %% Karlsruhe Institute of Technology
 %% Institute for Program Structures and Data Organization
-%% Chair for Software Design and Quality (SDQ)
-%%
-%% Dr.-Ing. Erik Burger
-%% burger@kit.edu
 \newpage
 \section{Conclusion}
 \label{ch:Conclusion}
+
+Gradient-Boosting Decision Trees achieve state-of-the-art results on many benchmarks and often outperform neural networks -- especially if training data is limited \parencites{shwartz-ziv_tabular_2021, grinsztajn_why_2022}. Therefore, a comparative study of the three popular GBDT libraries LightGBM, XGBoost, and CatBoost in the context of probabilistic forecasting for two targets was employed. The first target, Energy, was to forecast the hourly energy demand in Germany. The second target, Bikes, focused on predicting the daily bike count in Karlsruhe. Models were evaluated using Timeseries Cross-Validation for a more accurate estimate of the model errors against two baseline models. The baselines consisted of a historical quantile-based approach and a linear quantile regression (c. f. \cref{sec:Models:Baselines}.
+
+It was shown that all GBDT models outperformed the two baseline models by a good margin, although differences between various GBDT implementations were marginal taking the rather high standard deviation into account. It must be noted that GBDT models are very sensitive to hyperparameters and there only exist experimental studies on how to tune them \parencites{florek_benchmarking_2023, bentejac_comparative_2021}. For example, the parameter for the boosting type in CatBoost has a significant impact: Ordered CatBoost performed the worst by a wide margin and took the longest to train. However, using regular Gradient-Boosting in CatBoost even outperformed LightGBM slightly on the Energy Target. XGBoost was somewhat worse on both targets and needed more time to train than LightGBM. The latter performed well consistently and was the fastest implementation of the three GBDT libraries discussed here. In future work, hyperparameter-tuning could be investigated more thoroughly using advanced optimization techniques implemented e.g., by the popular \textit{Optuna} library \parencite{akiba_optuna_2019}.
+
+However, hyperparameter optimization mostly leads to marginal gains, but focusing on feature representations can improve the performance dramatically. Therefore, several exogenous variables, such as weather variables and encodings for seasonality, were used. A very important variable for both targets was the binary indicator for public holidays. Weather variables were helpful for the Bike Target but slightly decreased the performance for the Energy Target. This could be due to the fact that only weather variables for Karlsruhe were included, while the consumption of Germany has to be predicted. Here, improvement can be potentially be seen by using weather averaged over several stations throughout Germany.
 
