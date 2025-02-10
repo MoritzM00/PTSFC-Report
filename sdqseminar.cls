@@ -115,9 +115,15 @@
 \publishers{%
 \normalsize
 \theinstitute\\
-\ifcurrentbaselanguage{English}{Advisor}{Betreuender Mitarbeiter}: \theadvisor
+\vspace{0.5cm}
+% \ifcurrentbaselanguage{English}{Advisor}{Betreuender Mitarbeiter}: \theadvisor
+{Prof. Dr. Fabian Krüger}\\
+{JProf. (TT) Dr. Johannes Bracher}\\
+{M.Sc. Nils Koster}\\
+{Dr. Sebastian Lerch}\\[2cm]
 }
 }
+
 
 %% do not show the date
 \date{}

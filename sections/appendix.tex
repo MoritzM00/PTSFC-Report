@@ -31,14 +31,14 @@ In this section, the configuration for the GBDT models is explained in more deta
     \toprule
     \textbf{Parameter} & \textbf{XGBoost} & \textbf{LightGBM} & \textbf{CatBoost} \\ 
     \midrule
-    \multicolumn{4}{l}{\textbf{Feature-specific parameters}} \\
+    \multicolumn{4}{l}{\textit{Feature-specific parameters}} \\
     Lagged target values& $1,2,6,7,14,21,28$ & $1,2,6,7,8,14,21,28$ & $1,2,6,7,14,21,28$ \\
     Include seasonal encodings & true & true & true \\
     Use cyclical Encodings & true & true & true \\
     Include rolling stats & false & false & false \\
     Lagged exogenous variables & All & All & All \\
     \midrule
-    \multicolumn{4}{l}{\textbf{GBDT-specific parameters}} \\
+    \multicolumn{4}{l}{\textit{GBDT-specific parameters}} \\
     n\_estimators & 250 & 250 & 250 \\
     num\_leaves & -- & 15 & -- \\
     min\_child\_samples & -- & 50 & -- \\
@@ -218,6 +218,54 @@ In this section, the configuration for the GBDT models is explained in more deta
     
     \caption{Calibration curves of six different models on the Bikes Target, illustrating the calibration performance of each model.}
     \label{fig:bikes_calibration}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    % First row: two calibration curves
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_calibration/small-orfe_output_eval_plots_energy_calibration_curve.svg}
+        \caption{Linear Quantile Regression Calibration}
+        \label{fig:small-orfe-calibration-energy}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_calibration/armed-play_output_eval_plots_energy_calibration_curve.svg}
+        \caption{Benchmark Calibration}
+        \label{fig:armed-play-calibration-energy}
+    \end{subfigure}
+    
+    % Second row: two calibration curves
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_calibration/mangy-flux_output_eval_plots_energy_calibration_curve.svg}
+        \caption{LightGBM Calibration}
+        \label{fig:mangy-flux-calibration-energy}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_calibration/couth-ruby_output_eval_plots_energy_calibration_curve.svg}
+        \caption{XGBoost Calibration}
+        \label{fig:couth-ruby-calibration-energy}
+    \end{subfigure}
+    
+    % Third row: two calibration curves
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_calibration/civil-leas_output_eval_plots_energy_calibration_curve.svg}
+        \caption{Ordered CatBoost Calibration}
+        \label{fig:civil-leas-calibration-energy}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\textwidth}
+        \centering
+        \includesvg[width=\linewidth]{images/energy_calibration/blear-dita_output_eval_plots_energy_calibration_curve.svg}
+        \caption{Plain CatBoost Calibration}
+        \label{fig:blear-dita-calibration-energy}
+    \end{subfigure}
+    
+    \caption{Calibration curves of six different models on the Energy Target, illustrating the calibration performance of each model.}
+    \label{fig:energy_calibration}
 \end{figure}
 
 \begin{figure}[htbp]

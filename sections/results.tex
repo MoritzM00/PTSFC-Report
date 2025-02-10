@@ -12,7 +12,7 @@ The results of the internal validation scheme using TSCV as described in \cref{s
 \begin{table}[htp]
 \centering
 \resizebox{\columnwidth}{!}{
-\begin{tabular}{lrrrrr}
+\begin{tabular}{@{}lrrrrr@{}}
 \toprule
 Model & Pinball Loss & $\text{IS}_{0.5}$ & $\text{IS}_{0.05}$ & $\text{Cvg}_{0.5}$ & $\text{Cvg}_{0.05}$ \\
 \midrule
@@ -34,7 +34,7 @@ regarding the Pinball Loss. However, the empirical coverages are much better for
 \begin{table}[htp]
 \centering
 \resizebox{\columnwidth}{!}{
-\begin{tabular}{lrrrrr}
+\begin{tabular}{@{}lrrrrr@{}}
 \toprule
 Model & Pinball Loss & $\text{IS}_{0.5}$ & $\text{IS}_{0.05}$ & $\text{Cvg}_{0.5}$ & $\text{Cvg}_{0.05}$ \\
 \midrule
@@ -80,3 +80,22 @@ configuration to prevent overfitting and are described in more detail in Appendi
 
 \subsection{Backtest for the weekly forecasting challenge}
 \label{sec:Results:Backtest}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{@{}lcccccc@{}}
+        \toprule
+        & \multicolumn{3}{c}{Bike} & \multicolumn{3}{c}{Energy} \\
+        \cmidrule(lr){2-4} \cmidrule(lr){5-7}
+        \textbf{Model} & PL & Cov50 & Cov95 & PL & Cor50 & Cor95 \\
+        \midrule
+        Benchmark & 1 & 2 & 3 & 4 & 5 & 6 \\
+        Quantile Regression & 1 & 2 & 3 & 4 & 5 & 6 \\
+        XGBoost & 1 & 2 & 3 & 4 & 5 & 6 \\
+        CatBoost (Plain) & 1 & 2 & 3 & 4 & 5 & 6 \\
+        LightGBM & 1 & 2 & 3 & 4 & 5 & 6 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Performance of LightGBM on different categories}
+    \label{tab:lightgbm}
+\end{table}
