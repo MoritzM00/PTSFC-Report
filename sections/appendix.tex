@@ -1,6 +1,7 @@
 \section{Configuration for GBDT models}
+\label{appendix:GBDT-configs}
 
-In this section, the configuration for the GBDT models is explained in more detail. \Cref{tab:model-config} shows the configuration for the three models on the Bike Target. For these models, the following parameters are used to control the behavior and complexity in the gradient-boosting algorithm described in \cref{sec:Models:GBDT}: (NEED CITATION)
+In this section, the configuration for the GBDT models is explained in more detail. \Cref{tab:model-config-bikes} shows the configuration for the three models on the Bike Target and \cref{tab:model-config-energy} the configuration for the Energy Target. For these models, the following parameters are used to control the behavior and complexity in the gradient-boosting algorithm described in \cref{sec:Models:GBDT} \parencite[1941--1943]{bentejac_comparative_2021}: 
 
 \begin{description}
   \item[\textbf{n\_estimators}] The number of trees (boosting rounds) built during training. Increasing this number can improve model performance but may also increase the risk of overfitting and computational cost.
@@ -19,12 +20,13 @@ In this section, the configuration for the GBDT models is explained in more deta
   
   \item[\textbf{colsample\_bytree}] Similar to \texttt{colsample\_bylevel}, this parameter can also help prevent overfitting by only using a fraction of features for split evaluation. For this parameter, the subsampling is done once in each boosting iteration.
 
-  \item[\textbf{min\_child\_samples}] The minimum number of data samples required in a leaf. This parameter acts as a regularizer by ensuring that leaves have enough data to make reliable predictions.
+  \item[\textbf{min\_child\_samples}] The minimum number of data samples required in a leaf. This parameter acts as a regularizer by avoiding splits based on too few observations.
   
   \item[\textbf{reg\_lambda}] The L2 regularization term on leaf weights. Higher values impose a stronger penalty on large weights, which can help control overfitting.
   
 \end{description}
-\label{appendix:GBDT-configs}
+
+
 \begin{table}[htbp]
   \centering
   \begin{tabular}{@{} lccc @{}}
@@ -51,12 +53,44 @@ In this section, the configuration for the GBDT models is explained in more deta
     reg\_lambda & -- & 1 & 1e-2 \\
     \bottomrule
   \end{tabular}
-  \caption{Configuration for the three GBDT implementations XGBoost, LightGBM, and CatBoost.}
-  \label{tab:model-config}
+  \caption{Configuration for the three GBDT models XGBoost, LightGBM, and CatBoost on the Bike Target.}
+  \label{tab:model-config-bikes}
 \end{table}
+
+\begin{table}[htbp]
+  \centering
+  \begin{tabular}{@{} lccc @{}}
+    \toprule
+    \textbf{Parameter} & \textbf{XGBoost} & \textbf{LightGBM} & \textbf{CatBoost} \\ 
+    \midrule
+    \multicolumn{4}{l}{\textit{Feature-specific parameters}} \\
+    Lagged target values & \multicolumn{3}{c}{ $24,48,72,96,120,144,168,336,504,672$} \\
+    Include seasonal encodings & true & true & true \\
+    Use cyclical encodings & true & true & true \\
+    Include rolling stats & false & false & false \\
+    Lagged exogenous variables & All & All & All \\
+    \midrule
+    \multicolumn{4}{l}{\textit{GBDT-specific parameters}} \\
+    n\_estimators & 250 & 250 & 250 \\
+    num\_leaves & -- & 20 & -- \\
+    min\_child\_samples & -- & 200 & -- \\
+    grow\_policy & depthwise & leafwise & SymmetricTree \\
+    learning\_rate & 0.1 & 0.1 & 0.1 \\
+    max\_depth & 6 & 12 & 6 \\
+    colsample\_bylevel & 0.6 & -- & 0.6 \\
+    colsample\_bytree & -- & 0.6 & -- \\
+    subsample & 0.8 & 0.8 & 0.8 \\
+    reg\_lambda & 1e-3 & 2 & 1e-2 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Configuration for the three GBDT models XGBoost, LightGBM, and CatBoost for the Energy Target.}
+  \label{tab:model-config-energy}
+\end{table}
+
 
 \newpage
 \section{Additional Visualizations}
+\label{appendix:additional-visualizations}
 
 \begin{figure}[htbp]
     \centering
@@ -69,7 +103,7 @@ In this section, the configuration for the GBDT models is explained in more deta
     \begin{subfigure}[b]{0.95\textwidth}
         \centering
         \includesvg[width=1\linewidth]{images/catboost-energy-plot-2.svg}
-        \caption{Forecasts for a regular week in September 2024. The prediction intervals are slightly narrower than for the week shown in (a). However, they overestimate all quantiles for many timesteps in this week. The problem is exaggerated for the weekend starting with September 21, 2024, where the model overestimates the quantiles for almost all timesteps.}
+        \caption{Forecasts for a regular week in September 2024. The prediction intervals are slightly narrower than for the week shown in (a). However, they overestimate all quantiles for many timesteps during this week. The problem is exaggerated for the weekend starting with September 21, 2024, where the model overestimates the quantiles for almost all timesteps.}
         \label{fig:forecast-plot-2}
     \end{subfigure}
     \caption{Two forecast visualizations of the best model on the Energy Target, made during the TSCV for model selection as described in \cref{sec:Methodology:Evaluation}. It shows two TSCV folds, corresponding to two weeks in this setup. In black, the actual time-series is shown, and the dotted blue line is the predictive median. The shaded area shows the 50\% and 95\% prediction interval. (a) The first week of 2024 starting on Tuesday, 2nd, and (b) a regular week without holiday effects. It shows that the prediction intervals are often too narrow, which means the model is overconfident with its predictions. This could be due to the inclusion of too many lags, which decreases coverage levels. However, the model learned the higher uncertainty due to the holiday and seasonality effects in the first week of a year reflected by wider prediction intervals.}
@@ -312,7 +346,7 @@ In this section, the configuration for the GBDT models is explained in more deta
         \label{fig:blear-dita-pinball-energy}
     \end{subfigure}
     
-    \caption{Pinball Losses for six different models on the Energy Forecast.}
+    \caption{Pinball Losses for six different models on the Energy Target.}
     \label{fig:energy_pinball}
 \end{figure}
 
@@ -360,6 +394,6 @@ In this section, the configuration for the GBDT models is explained in more deta
         \label{fig:blear-dita-pinball-bikes}
     \end{subfigure}
     
-    \caption{Pinball Losses for six different models on the Bikes Forecast.}
+    \caption{Pinball Losses for six different models on the Bike Target.}
     \label{fig:bikes_pinball}
 \end{figure}
