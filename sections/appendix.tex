@@ -12,7 +12,7 @@ In this section, the configuration for the GBDT models is explained in more deta
 
   \item[\textbf{num\_leaves}] The maximum number of leaves (i.e. terminal nodes) per tree. A larger value increases the model’s capacity but may also lead to overfitting. This is the primary and preferred way of limiting tree complexity in LightGBM due to its leaf-wise (best-first) node expansion.
   
-  \item[\textbf{tree\_method}] (XGBoost-specific) The algorithm used for constructing trees. For example, the \texttt{hist} method builds histograms to accelerate training and reduce memory usage. Other available algorithms are \texttt{exact} (full enumeration of all split points) and \texttt{approx} (Approximate algorithm as outlined in \cite[Chapter~3.2]{chen_xgboost_2016}).
+  % \item[\textbf{tree\_method}] (XGBoost-specific) The algorithm used for constructing trees. For example, the \texttt{hist} method builds histograms to accelerate training and reduce memory usage. Other available algorithms are \texttt{exact} (full enumeration of all split points) and \texttt{approx} (Approximate algorithm as outlined in \cite[Chapter~3.2]{chen_xgboost_2016}).
   
   \item[\textbf{grow\_policy}] The strategy for expanding trees during training. Options such as \texttt{depthwise} (used in XGBoost) or \texttt{SymmetricTree} (used in CatBoost) influence the structure of the trees and can affect performance. XGboost also supports leaf-wise growth. CatBoost supports all three options. This parameter is not available in LightGBM as it only supports leaf-wise growth.
   

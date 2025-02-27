@@ -9,14 +9,14 @@ Finally, the weekly forecasting challenge and how predictions are generated will
 \subsection{Pipeline}
 \label{sec:Methodology:Pipeline}
 
-Typical data science projects are developed iteratively, making a reproducible and streamlined workflow essential for analysis and continuing improvement. For this reason, a data pipeline is implemented using \textit{Data Version Control} \parencite{ruslan_kuprieiev_dvc_2024}, providing automatic caching and execution mechanisms. This setup allows for comparing model metrics among experiments and ensures reproducibility because it tracks the state of the git repository along with user-defined configuration and stage outputs. An overview of the pipeline can be found in \cref{fig:pipeline}.
+Typical data science projects are developed iteratively, making a reproducible and streamlined workflow essential for analysis and continuing improvement. For this reason, a data pipeline is implemented using \textsc{Data Version Control} \parencite{ruslan_kuprieiev_dvc_2024}, providing automatic caching and execution mechanisms. This setup allows for comparing model metrics among experiments and ensures reproducibility because it tracks the state of the git repository along with user-defined configuration and stage outputs. An overview of the pipeline can be found in \cref{fig:pipeline}.
 \begin{figure}[htbp]
   \centering
   \includesvg{images/graphviz.svg}
   \caption{Overview of pipeline stages with dependencies shown as a directed acyclic graph (DAG). There are four stages, but some are run several times. The prepare, train, and eval stages are run for each target indicated by the naming convention \textit{stage-name@target}.} 
   \label{fig:pipeline}
 \end{figure}
-The pipeline consists of four steps: First, the data is prepared by fetching relevant information from APIs. In this step, weather features using the OpenMeteo API are also generated. Second, models are trained and saved to disk for later use and inspection. \textit{Sktime} \parencite{franz_kiraly_sktimesktime_2024}, a popular python library for time series applications is used to provide an interface and avoid boilerplate code. Third, time-series cross-validation is performed, and all relevant metrics and visual inspections are calculated and plotted. More details on the evaluation are given in \cref{sec:Methodology:Evaluation}. Finally, out-of-sample forecasts for the specific forecasting horizons are generated and saved in the required format.
+The pipeline consists of four steps: First, the data is prepared by fetching relevant information from APIs. In this step, weather features using the \textsc{OpenMeteo} API are also generated. Second, models are trained and saved to disk for later use and inspection. \textsc{sktime} \parencite{franz_kiraly_sktimesktime_2024}, a popular python library for time series applications is used to provide an interface and avoid boilerplate code. Third, time-series cross-validation is performed, and all relevant metrics and visual inspections are calculated and plotted. More details on the evaluation are given in \cref{sec:Methodology:Evaluation}. Finally, out-of-sample forecasts for the specific forecasting horizons are generated and saved in the required format.
 
 \subsection{Weekly Forecasting Challenge}
 \label{sec:Methodology:ForecastingChallenge}
