@@ -2,9 +2,7 @@
 \section{Methodology}
 \label{ch:Methodology}
 
-This chapter gives a detailed explanation of the methodology of this project. First, the pipeline is introduced in \cref{sec:Methodology:Pipeline}, followed by a description of the forecasting challenge in \cref{sec:Methodology:ForecastingChallenge}. Third, the evaluation in the context of probabilistic time-series forecasting is discussed in \cref{sec:Methodology:Evaluation}, and fourth, the feature engineering is presented in \cref{sec:Methodology:FeatureEngineering}.
-Finally, the weekly forecasting challenge and how predictions are generated will be discussed in \cref{sec:Methodology:ForecastingChallenge}.
-
+This chapter gives a detailed explanation of the methodology of this project. First, the pipeline is introduced in \cref{sec:Methodology:Pipeline}, followed by a description of the forecasting challenge and how those predictions are generated in \cref{sec:Methodology:ForecastingChallenge}. Third, the evaluation in the context of probabilistic time series forecasting is discussed in \cref{sec:Methodology:Evaluation}, and fourth, the feature engineering is presented in \cref{sec:Methodology:FeatureEngineering}.
 
 \subsection{Pipeline}
 \label{sec:Methodology:Pipeline}
@@ -16,7 +14,7 @@ Typical data science projects are developed iteratively, making a reproducible a
   \caption{Overview of pipeline stages with dependencies shown as a directed acyclic graph (DAG). There are four stages, but some are run several times. The prepare, train, and eval stages are run for each target indicated by the naming convention \textit{stage-name@target}.} 
   \label{fig:pipeline}
 \end{figure}
-The pipeline consists of four steps: First, the data is prepared by fetching relevant information from APIs. In this step, weather features using the \textsc{OpenMeteo} API are also generated. Second, models are trained and saved to disk for later use and inspection. \textsc{sktime} \parencite{franz_kiraly_sktimesktime_2024}, a popular python library for time series applications is used to provide an interface and avoid boilerplate code. Third, time-series cross-validation is performed, and all relevant metrics and visual inspections are calculated and plotted. More details on the evaluation are given in \cref{sec:Methodology:Evaluation}. Finally, out-of-sample forecasts for the specific forecasting horizons are generated and saved in the required format.
+The pipeline consists of four steps: First, the data is prepared by fetching relevant information from APIs. In this step, weather features using the \textsc{OpenMeteo} API are also generated. Second, models are trained and saved to disk for later use and inspection. \textsc{sktime} \parencite{franz_kiraly_sktimesktime_2024}, a popular python library for time series applications is used to provide an interface and avoid boilerplate code. Third, time series cross-validation is performed, and all relevant metrics and visual inspections are calculated and plotted. More details on the evaluation are given in \cref{sec:Methodology:Evaluation}. Finally, out-of-sample forecasts for the specific forecasting horizons are generated and saved in the required format.
 
 \subsection{Weekly Forecasting Challenge}
 \label{sec:Methodology:ForecastingChallenge}
@@ -29,7 +27,7 @@ The currently selected model is trained on all available data. This happens duri
 \subsection{Evaluation}
 \label{sec:Methodology:Evaluation}
 
-This section briefly describes how the models are evaluated using \textbf{time series cross-validation} (TSCV) \parencite[Chapter~5.10]{hyndman_forecasting_2021}. The difference between standard Cross-Validation \parencite[241--248]{hastie_elements_2009} is that shuffling data points must be avoided because of data leakage. Furthermore, an expanding or sliding window approach is employed. This procedure can be explained with a picture showing different training windows and forecasting horizons, as seen in \cref{fig:tscv}.
+This section briefly describes how the models are evaluated using \textbf{time series cross-validation} (TSCV) \parencite[Chapter~5.10]{hyndman_forecasting_2021}. The difference between standard cross-validation \parencite[241--248]{hastie_elements_2009} is that shuffling data points must be avoided because of data leakage. Furthermore, an expanding or sliding window approach is employed. This procedure can be explained with a picture showing different training windows and forecasting horizons, as seen in \cref{fig:tscv}.
 \begin{figure}[htbp]
     \centering
     \includesvg[width=\textwidth]{images/cv_window.svg}

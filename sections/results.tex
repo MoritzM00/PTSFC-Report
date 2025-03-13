@@ -24,7 +24,7 @@ CatBoost (Plain) & 539.69 (± 301.24) & \textbf{570.01 (± 313.35)} & 1664.76 (�
 LightGBM & \textbf{529.07 (± 251.59)} & 578.72 (± 285.86) & \textbf{1337.58 (± 646.38)} & 0.36 (± 0.23) & 0.90 (± 0.12) \\
 \bottomrule
 \end{tabular}}
-\caption{Results of time series cross-validation on the Bike Target for the full year 2024 with weekly shifting of sliding windows. The best values are highlighted in bold. \textit{Pinball Loss} refers to the sum of the pinball losses for all quantile levels, averaged over the folds in the TSCV (cf. \cref{sec:Methodology:Evaluation})}
+\caption{Results of time series cross-validation on the Bike Target for the full year 2024 with weekly shifting of sliding windows. The best values are highlighted in bold. \textit{Pinball Loss} refers to the sum of the Pinball Losses for all quantile levels, averaged over the folds in the TSCV (cf. \cref{sec:Methodology:Evaluation})}
 \label{tab:bikes_results}
 \end{table}
 
@@ -50,7 +50,7 @@ CatBoost (Plain) & \textbf{2.25 (± 1.14)} & \textbf{2.42 (± 1.12)} & \textbf{5
 \label{tab:energy_results}
 \end{table}
 
-The coverage of the 95\% prediction interval $\text{Cvg}_{0.05}$ is below 85\% for most GBDT-Models and the coverage for the 50\% prediction interval is even worse. This means that the GBDT models probably still overfit the training data due to the included lagged target values and, thus, are too confident in their predictions. It was observed that too many lags reduce the coverage substantially, but some are lags are needed to reduce the pinball loss. Besides including too many lagged target values, it seemed that including too many weather variables or lagged exogenous variables also made the prediction intervals of the GBDT models narrower. As an example, a visual inspection of the narrow prediction intervals for the CatBoost model is given in the appendix in \cref{fig:Forecast-visualization}.
+The coverage of the 95\% prediction interval $\text{Cvg}_{0.05}$ is below 85\% for most GBDT-Models and the coverage for the 50\% prediction interval is even worse. This means that the GBDT models probably still overfit the training data due to the included lagged target values and, thus, are too confident in their predictions. It was observed that too many lags reduce the coverage substantially, but some are lags are needed to reduce the Pinball Loss. Besides including too many lagged target values, it seemed that including too many weather variables or lagged exogenous variables also made the prediction intervals of the GBDT models narrower. As an example, a visual inspection of the narrow prediction intervals for the CatBoost model is given in the appendix in \cref{fig:Forecast-visualization}.
 Only CatBoost achieves better coverage values when the ordered boosting type is used on the Energy
 Target, at the cost of a much higher Pinball Loss. This can be visually evaluated with the calibration plots shown in \cref{fig:calibration-comparison}, where the CatBoost calibration (\cref{fig:catboost-ordered-calibration}) is compared to the LightGBM calibration (\cref{fig:lgbm-calibration}).
 \begin{figure}[htbp]
