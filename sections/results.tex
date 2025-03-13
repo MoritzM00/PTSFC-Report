@@ -24,7 +24,7 @@ CatBoost (Plain) & 539.69 (± 301.24) & \textbf{570.01 (± 313.35)} & 1664.76 (�
 LightGBM & \textbf{529.07 (± 251.59)} & 578.72 (± 285.86) & \textbf{1337.58 (± 646.38)} & 0.36 (± 0.23) & 0.90 (± 0.12) \\
 \bottomrule
 \end{tabular}}
-\caption{Results of Timeseries Cross-Validation on the Bike Target for the full year 2024 with weekly shifting of sliding windows. Best values are highlighted in bold. \textit{Pinball Loss} refers to the sum of the pinball losses for all quantile levels, averaged over the folds in the TSCV (cf. \cref{sec:Methodology:Evaluation})}
+\caption{Results of time series cross-validation on the Bike Target for the full year 2024 with weekly shifting of sliding windows. The best values are highlighted in bold. \textit{Pinball Loss} refers to the sum of the pinball losses for all quantile levels, averaged over the folds in the TSCV (cf. \cref{sec:Methodology:Evaluation})}
 \label{tab:bikes_results}
 \end{table}
 
@@ -46,13 +46,13 @@ LightGBM & 2.30 (± 1.16) & 2.47 (± 1.15) & 6.42 (± 5.58) & 0.38 (± 0.13) & 0
 CatBoost (Plain) & \textbf{2.25 (± 1.14)} & \textbf{2.42 (± 1.12)} & \textbf{5.98 (± 5.73)} & 0.39 (± 0.14) & 0.84 (± 0.15) \\
 \bottomrule
 \end{tabular}}
-\caption{Results of Timeseries Cross-Validation on the Energy Target for the full year 2024 with weekly shifting of sliding windows. Best values are highlighted in bold.}
+\caption{Results of time series cross-validation on the Energy Target for the full year 2024 with weekly shifting of sliding windows. The best values are highlighted in bold.}
 \label{tab:energy_results}
 \end{table}
 
-The coverage of the 95\% prediction interval $\text{Cvg}_{0.05}$ is below 85\% for most GBDT-Models and the coverage for the 50\% prediction interval is even worse. This means that the GBDT models probably still overfit the training data due to the included lagged target values, and thus are too confident in their predictions. It was observed that too many lags reduce the coverage substantially, but some are lags are needed to reduce the pinball loss. Besides including too many lagged target values, it seemed that including too many weather variables or lagged exogenous variables also made the prediction intervals of the GBDT models narrower. As en example, a visual inspection of the narrow prediction intervals for the CatBoost model is given in the appendix in \cref{fig:Forecast-visualization}.
+The coverage of the 95\% prediction interval $\text{Cvg}_{0.05}$ is below 85\% for most GBDT-Models and the coverage for the 50\% prediction interval is even worse. This means that the GBDT models probably still overfit the training data due to the included lagged target values and, thus, are too confident in their predictions. It was observed that too many lags reduce the coverage substantially, but some are lags are needed to reduce the pinball loss. Besides including too many lagged target values, it seemed that including too many weather variables or lagged exogenous variables also made the prediction intervals of the GBDT models narrower. As an example, a visual inspection of the narrow prediction intervals for the CatBoost model is given in the appendix in \cref{fig:Forecast-visualization}.
 Only CatBoost achieves better coverage values when the ordered boosting type is used on the Energy
-Target, at the cost of a much higher Pinball Loss. This can be visually evaluated with the calibration plots shown in \cref{fig:calibration-comparison} where the CatBoost calibration (\cref{fig:catboost-ordered-calibration}) is compared to the LightGBM calibration (\cref{fig:lgbm-calibration}).
+Target, at the cost of a much higher Pinball Loss. This can be visually evaluated with the calibration plots shown in \cref{fig:calibration-comparison}, where the CatBoost calibration (\cref{fig:catboost-ordered-calibration}) is compared to the LightGBM calibration (\cref{fig:lgbm-calibration}).
 \begin{figure}[htbp]
     \centering
     \begin{subfigure}[b]{0.5\textwidth}
@@ -67,7 +67,7 @@ Target, at the cost of a much higher Pinball Loss. This can be visually evaluate
         \caption{LightGBM}
         \label{fig:lgbm-calibration}
     \end{subfigure}
-    \caption{Calibration plots for two selected models on the Energy Target. It shows that the GBDT models tend to over-estimate the lower quantiles $\hat{q}_{0.025}$, $\hat{q}_{0.25}$ and under-estimate the upper levels $\hat{q}_{0.075}$, $\hat{q}_{0.975}$. CatBoost with the \texttt{boosting\_type=Ordered} parameter set, is slightly better calibrated than LightGBM at the cost of a higher Pinball Loss. XGBoost is very similar to LightGBM in this regard.}
+    \caption{Calibration plots for two selected models on the Energy Target. It shows that the GBDT models tend to over-estimate the lower quantiles $\hat{q}_{0.025}$, $\hat{q}_{0.25}$ and under-estimate the upper levels $\hat{q}_{0.075}$, $\hat{q}_{0.975}$. CatBoost with the \texttt{boosting\_type=Ordered} parameter set is slightly better calibrated than LightGBM at the cost of a higher Pinball Loss. XGBoost is very similar to LightGBM in this regard.}
     \label{fig:calibration-comparison}
 \end{figure}
 
@@ -78,7 +78,7 @@ CatBoost also supports the standard (Plain) gradient-boosting algorithm,
 and with this, it performs on par with LightGBM and even outperforms it slightly on
 the Energy Target. However, this is highly hyperparameter-dependent, and the standard
 deviation is generally relatively high. The chosen hyper-parameters deviate from the default 
-configuration to prevent overfitting and are described in more detail in Appendix~\ref{appendix:GBDT-configs}.\footnote{For example, the default parameters of LightGBM allow for trees with unlimited depth, restricting them only to a maximum of 32 leaves. This can lead to overfitting because nodes are expanded best first during tree construction. In addition, many randomization settings, such as subsampling of rows and columns, are disabled by default.}
+configuration to prevent overfitting and are described in more detail in Appendix~\ref{appendix:GBDT-configs}.\footnote{For example, the default parameters of LightGBM allow for trees with unlimited depth, restricting them only to a maximum of 32 leaves. This can lead to overfitting because nodes are expanded best first during tree construction. In addition, many randomization settings, such as the subsampling of rows and columns, are disabled by default.}
 
 
 \subsection{Backtest for the weekly forecasting challenge}
@@ -124,4 +124,4 @@ configuration to prevent overfitting and are described in more detail in Appendi
     \label{tab:challenge-backtest}
 \end{table}
 
-There are several things to note here. First, the benchmark model generally performs worse in this period, with a big hit in coverage values and Pinball Loss, especially for the Energy Target. The second baseline model, the Linear Quantile Regression, performs quite similarly compared to previously in \cref{tab:bikes_results} and \cref{tab:energy_results}, also showing the best coverage values overall in this time frame. Second, the GBDT models more or less stayed consistent as well, with LightGBM performing the best on both targets, regarding both Pinball Loss and coverage. However, the coverage values for XGBoost and CatBoost are much worse on the Bike Target. For example, compared to the validation backtest, CatBoost shows a loss of 13 and 7 percentage points in 50\% and 95\% PI Coverage, respectively. Therefore, a slight overfitting problem of XGBoost and CatBoost on the relatively small Bike Target regarding sample size is likely. LightGBM holds coverage values much better on this target, probably due to slightly larger settings for regularization parameters (cf. \cref{tab:model-config-bikes}).
+There are several things to note here. First, the benchmark model generally performs worse in this period, with a big hit in coverage values and Pinball Loss, especially for the Energy Target. The second baseline model, the Linear Quantile Regression, performs quite similarly compared to previously in \cref{tab:bikes_results} and \cref{tab:energy_results}, also showing the best coverage values overall in this time frame. Second, the GBDT models more or less stayed consistent as well, with LightGBM performing the best on both targets regarding both Pinball Loss and coverage. However, the coverage values for XGBoost and CatBoost are much worse on the Bike Target. For example, compared to the validation backtest, CatBoost shows a loss of 13 and 7 percentage points in 50\% and 95\% PI Coverage, respectively. Therefore, a slight overfitting problem of XGBoost and CatBoost on the relatively small Bike Target regarding sample size is likely. LightGBM holds coverage values much better on this target, probably due to slightly larger settings for regularization parameters (cf. \cref{tab:model-config-bikes}).

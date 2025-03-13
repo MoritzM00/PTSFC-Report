@@ -29,16 +29,16 @@ The currently selected model is trained on all available data. This happens duri
 \subsection{Evaluation}
 \label{sec:Methodology:Evaluation}
 
-This section briefly describes how the models are evaluated using \textbf{Timeseries Cross-Validation} (TSCV) \parencite[Chapter~5.10]{hyndman_forecasting_2021}. The difference between standard Cross-Validation \parencite[241--248]{hastie_elements_2009} is that shuffling data points must be avoided because of data leakage. Furthermore, an expanding or a sliding window approach is employed. This procedure can be explained easily with a picture showing different training windows and forecasting horizons, as seen in \cref{fig:tscv}.
+This section briefly describes how the models are evaluated using \textbf{time series cross-validation} (TSCV) \parencite[Chapter~5.10]{hyndman_forecasting_2021}. The difference between standard Cross-Validation \parencite[241--248]{hastie_elements_2009} is that shuffling data points must be avoided because of data leakage. Furthermore, an expanding or sliding window approach is employed. This procedure can be explained with a picture showing different training windows and forecasting horizons, as seen in \cref{fig:tscv}.
 \begin{figure}[htbp]
     \centering
     \includesvg[width=\textwidth]{images/cv_window.svg}
-    \caption{This figure depicts ten different folds in a Timeseries Cross-Validation with a sliding window. The train window (blue) uses a fixed amount of data points, in this case, three years, and then the following points after the train window ends is the test set (yellow), as defined by the forecasting horizon.}
+    \caption{This figure depicts ten different folds in a time series cross-validation with a sliding window. The train window (blue) uses a fixed amount of data points, in this case, three years, and then the following points after the train window ends is the test set (yellow), as defined by the forecasting horizon.}
     \label{fig:tscv}
 \end{figure}
 This project uses a sliding window approach to keep the training window constant. This is because the final model used for the submission forecasts will also be trained on roughly the same amount of data. At first, a constant three-year training window was selected. However, more data was significantly helpful for some models, especially for the Bike target, where less data is available due to daily bike counts. Therefore, the training window uses all available data, starting in October 2012 for Bikes and in October 2015 for Energy.
 
-The different models will be compared using TSCV using 52 folds (weeks) starting from October 23, 2023, and ending right before the challenge begins on October 23, 2024. To keep the evaluation similar to the setup of the weekly forecasting challenge, a weekly forecasting horizon and window shifting are used. This means that models generate one-week ahead forecasts, after which the sliding window shifts by one week and the models are retrained to generate the forecasts for next week.
+The different models will be compared using TSCV using 52 folds (weeks) starting from October 23, 2023, and ending right before the challenge begins on October 23, 2024. To keep the evaluation similar to the setup of the weekly forecasting challenge, a weekly forecasting horizon and window shifting are used. This means that models generate one-week-ahead forecasts, after which the sliding window shifts by one week, and the models are retrained to generate the forecasts for next week.
 
 \textbf{Evaluation metrics} are computed for each TSCV fold and averaged over all folds. For this reason, all metrics computed during TSCV are reported with their corresponding standard deviation between folds. The main metric is the \textit{Pinball Loss} (also: Quantile Score) defined by:
 
@@ -72,8 +72,7 @@ The coverage calculates the fraction of observations inside the interval and sho
 \subsection{Feature Engineering}
 \label{sec:Methodology:FeatureEngineering}
 
-As most forecasting methods used in the project are traditional tabular regressors, 
-it is essential to generate good feature representations. 
+As most forecasting methods used in the project are traditional tabular regressors, it is essential to generate good feature representations. 
 This is called feature engineering and will be discussed in more detail here.
 The use of tabular regressors for forecasting is motivated by the availability of many potentially helpful features, such as weather variables, for energy consumption and bike traffic forecasting.
 By incorporating these engineered features, we enhance the model's ability to 
