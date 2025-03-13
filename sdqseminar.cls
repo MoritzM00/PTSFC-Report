@@ -76,7 +76,7 @@
 \KOMAoptions{
    fontsize=12pt,
    paper=a4,
-   titlepage=false,
+   titlepage=true,
    headinclude=true,
    footinclude=false,
 }
