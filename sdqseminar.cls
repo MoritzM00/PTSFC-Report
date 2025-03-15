@@ -118,7 +118,7 @@
 \vspace{0.5cm}
 % \ifcurrentbaselanguage{English}{Advisor}{Betreuender Mitarbeiter}: \theadvisor
 {Prof. Dr. Fabian Krüger}\\
-{JProf. (TT) Dr. Johannes Bracher}\\
+{Jun.-Prof. Dr. Johannes Bracher}\\
 {M.Sc. Nils Koster}\\
 {Dr. Sebastian Lerch}\\[2cm]
 }
