@@ -1,4 +1,19 @@
 
+@misc{sluijterman_composite_2024,
+	title = {Composite Quantile Regression With {XGBoost} Using the Novel Arctan Pinball Loss},
+	url = {http://arxiv.org/abs/2406.02293},
+	doi = {10.48550/arXiv.2406.02293},
+	abstract = {This paper explores the use of {XGBoost} for composite quantile regression. {XGBoost} is a highly popular model renowned for its flexibility, efficiency, and capability to deal with missing data. The optimization uses a second order approximation of the loss function, complicating the use of loss functions with a zero or vanishing second derivative. Quantile regression -- a popular approach to obtain conditional quantiles when point estimates alone are insufficient -- unfortunately uses such a loss function, the pinball loss. Existing workarounds are typically inefficient and can result in severe quantile crossings. In this paper, we present a smooth approximation of the pinball loss, the arctan pinball loss, that is tailored to the needs of {XGBoost}. Specifically, contrary to other smooth approximations, the arctan pinball loss has a relatively large second derivative, which makes it more suitable to use in the second order approximation. Using this loss function enables the simultaneous prediction of multiple quantiles, which is more efficient and results in far fewer quantile crossings.},
+	number = {{arXiv}:2406.02293},
+	publisher = {{arXiv}},
+	author = {Sluijterman, Laurens and Kreuwel, Frank and Cator, Eric and Heskes, Tom},
+	urldate = {2025-03-15},
+	date = {2024-06-04},
+	eprinttype = {arxiv},
+	eprint = {2406.02293 [stat]},
+	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning},
+}
+
 @misc{azul_garza_statsforecast_2022,
 	title = {{StatsForecast}: Lightning fast forecasting with statistical and econometric models},
 	url = {https://github.com/Nixtla/statsforecast},
